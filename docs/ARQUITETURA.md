@@ -8,7 +8,7 @@ As regras léxicas para identificadores e veículos são regulares. Um autômato
 
 Para PLACA, o autômato exige uma aspa de abertura, exatamente sete transições com caracteres de `[A-Z0-9]` e uma aspa final. O código faz uma varredura limitada ao literal e usa uma expressão regular com correspondência completa. Símbolos fora das classes aceitas, quantidade incorreta e aspas sem fechamento têm diagnósticos distintos.
 
-O lexer não precisa de pilha. O parser traduz a sequência de tokens em construções de mais alto nível. Embora o projeto use EBNF e parser descendente recursivo, **esta gramática específica tem apenas um bloco sem aninhamento e repetição plana de comandos; não é correto usá-la como exemplo de linguagem necessariamente não regular**. A separação léxico/sintático é uma escolha de arquitetura e ensino. A noção mais geral de linguagens livres de contexto e autômatos de pilha pode ser apresentada sem atribuir recursos inexistentes a esta DSL.
+O lexer não precisa de pilha. A gramática agora admite blocos recursivos: o parser usa sua pilha de chamadas para reconhecer o aninhamento. A EBNF abstrata permite profundidade arbitrária; a implementação limita a 32 blocos para controlar recursos. Não se deve confundir a gramática abstrata com a linguagem efetivamente limitada pela implementação.
 
 ## 2. Por que não há retrocesso no parser
 
@@ -21,10 +21,17 @@ Os conjuntos FIRST das alternativas de comando são disjuntos:
 | estacionar | estacionar |
 | liberar | liberar |
 | saida | saida |
+| definicao | definir |
+| bloco | bloco |
 
-Cada comando é escolhido com um token de antecipação. Depois de cada comando, o parser aceita outro início de comando ou `}`; EOF antes de `}` sinaliza ausência do delimitador. A repetição usa laço, e não recursão proporcional à quantidade de comandos. Milhares de comandos não fazem a pilha crescer com o tamanho do programa.
+Cada comando é escolhido com um token de antecipação. Depois de cada comando, o parser aceita outro início de comando ou `}`; EOF antes de `}` sinaliza ausência do delimitador. A repetição usa laço, e não recursão proporcional à quantidade de comandos. A pilha cresce com a profundidade dos blocos, não com o número de comandos irmãos.
 
-## 3. Semântica dinâmica
+## 3. Tipos, símbolos e semântica dinâmica
+
+`symbols.py` implementa uma pilha de dicionários. Cada símbolo contém nome, tipo (`veiculo` ou `vaga`), valor, caminho de escopo e linha de declaração. A busca vai do escopo interno ao externo. `definir` exige tipo do valor igual à anotação. Operações de presença exigem `veiculo`; destinos exigem `vaga`. Declarações físicas alimentam a tabela global. Aliases são imutáveis e não aceitam referências futuras.
+
+O bloco empilha um ambiente e o remove em `finally`, inclusive se ocorrer erro. Uma declaração local pode sombrear uma global; ao sair, a global volta a ser visível. O registro de declarações permanece disponível para a interface, com marcação de escopos encerrados. O estado físico do estacionamento é global e não é revertido ao sair do bloco. Validações são feitas antes de cada comando, não em uma passagem estática integral.
+
 
 Reconhecer `estacionar "ABC1234" em A1` não prova que A1 foi declarada nem que o veículo está presente. Essas propriedades dependem da história de execução. Declarações não são antecipadas: uma vaga declarada depois de um uso não torna válido o uso anterior.
 
@@ -63,4 +70,10 @@ Com `--verify` desativado, a interpretação tem custo médio O(C), mais o armaz
 | Ensaios 10/100/1000, 5+30 | benchmark.py | benchmark.json e benchmark.csv |
 | Concisão com infraestrutura explícita | compare_concision.py | concision.json |
 
-O identificador SHA-256 de revisão mede os módulos de produção e o script de benchmark. Os testes e a documentação não integram esse hash; o manifesto SHA256SUMS.txt identifica os arquivos de toda a entrega. A fonte conceitual é o artigo fornecido pelo usuário. As referências bibliográficas citadas no artigo não são apresentadas aqui como leituras independentes verificadas nesta implementação.
+O identificador SHA-256 de revisão mede os módulos de produção e o script de benchmark. Os testes e a documentação não integram esse hash; o manifesto SHA256SUMS.txt identifica os arquivos de toda a entrega. O artigo revisado inclui a comparação com ParkLang (DOI 10.5220/0014399800004058), uma linguagem de modelagem arquitetural de estacionamentos, distinta desta DSL executável.
+
+## 7. Interface e separação de responsabilidades
+
+`gui.py` usa HTTP da biblioteca padrão, escuta apenas em 127.0.0.1 e serve três arquivos locais. `web/app.js` envia o texto para `/api/run`. `service.run_source` cria um interpretador por chamada e retorna tokens, AST, símbolos, eventos e estado. Nenhum código Python do editor é executado. O frontend usa `textContent` para exibir valores e erros. Há limites de entrada, validação de Host/Origin e caminhos estáticos permitidos. Não há autenticação, hospedagem pública ou persistência.
+
+A interface conserva o resultado anterior enquanto você edita e indica que uma nova execução é necessária. O benchmark mede somente o núcleo, sem HTTP, DOM ou verificação global por comando; os tempos não representam latência do painel.

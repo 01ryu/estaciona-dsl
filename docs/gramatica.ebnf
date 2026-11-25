@@ -1,12 +1,19 @@
 programa = "estacionamento", ID, "{", comando, { comando }, "}", EOF ;
-comando = declaracao | entrada | estacionar | liberar | saida ;
+comando = declaracao | entrada | estacionar | liberar | saida | definicao | bloco ;
 declaracao = "vaga", ID, tipo ;
 tipo = "comum" | "pcd" | "idoso" ;
-entrada = "entrada", PLACA ;
-estacionar = "estacionar", PLACA, "em", ID ;
+entrada = "entrada", operando ;
+estacionar = "estacionar", operando, "em", ID ;
 liberar = "liberar", ID ;
-saida = "saida", PLACA ;
+saida = "saida", operando ;
 
+operando = PLACA | ID ;
+definicao = "definir", ID, ":", tipo_dado, "=", operando ;
+tipo_dado = "veiculo" | "vaga" ;
+bloco = "bloco", "{", { comando }, "}" ;
+
+(* Restrição de implementação: no máximo 32 blocos locais aninhados.
+   Vagas físicas somente globais; verificação semântica, não sintática. *)
 (* Convenções léxicas, externas à EBNF acima:
    ID: [A-Za-z][A-Za-z0-9_]*, excluídas as palavras reservadas.
    PLACA: aspas duplas envolvendo [A-Z0-9]{7}.

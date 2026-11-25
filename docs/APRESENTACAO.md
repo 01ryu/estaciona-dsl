@@ -1,72 +1,38 @@
-# Roteiro de apresentação e estudo
+# Apresentação da versão 2.0
 
-## Demonstração sugerida: 8 a 10 minutos
+## Roteiro de 8 a 10 minutos
 
-**0:00-1:00 - Problema e objetivo.** Explique que comandos de estacionamento precisam de sintaxe e regras de estado. O objetivo é implementar uma DSL pequena para estudar processamento de linguagens; não se trata de um produto com sensores ou inteligência artificial.
+1. Abra ABRIR_INTERFACE.bat. Explique que o navegador é a interface de um interpretador Python local.
+2. Selecione 01 · Ciclo completo, carregue e execute. Mostre as vagas livres ao final e a diferença entre liberar e sair.
+3. Abra Tokens: palavras e literais viraram unidades com linha e coluna. Em lexer.py, mostre tokenize e as expressões de ID/PLACA.
+4. Abra Árvore sintática. Em parser.py, mostre parse, command e operand. O parser reconhece a ordem e cria dataclasses, sem executar.
+5. Carregue 08 · Tipos e escopos. Antes de executar, explique que cliente global é ABC1234 e cliente local é DEF5678. Execute: B2 fica ocupada por DEF5678; ABC1234 sai.
+6. Abra Símbolos e escopos. Mostre nome, tipo, valor e os aliases do bloco encerrado. Em symbols.py, mostre find (busca interna para externa) e expect (igualdade de tipos).
+7. Em interpreter.py, mostre step: resolve referências, valida, altera estado e registra evento. No bloco, finally garante remoção do escopo.
+8. Execute 09 · Erro de tipo e 10 · Erro de escopo. Explique T001 e T002. Depois, 04 erro ocupada: E005 preserva o prefixo válido.
+9. Mostre run_tests.py e results/test_results.json: 81 métodos passaram. Subcasos não são contados como métodos adicionais.
+10. Termine com limites: simulação acadêmica, memória, sem cobrança, sensores, persistência ou estudo com usuários.
 
-**1:00-2:00 - Sintaxe.** Abra `examples/01_ciclo_completo.dsl`. Mostre as cinco palavras iniciais de comando, as categorias e as placas entre aspas. Explique por que `liberar` e `saida` são operações distintas.
+## Perguntas de código
 
-**2:00-3:30 - Pipeline.** Execute:
+**Isso é um compilador?** É um interpretador: constrói uma AST e a percorre para executar. Não gera código de máquina.
 
-```console
-python main.py examples/01_ciclo_completo.dsl --tokens
-python main.py examples/01_ciclo_completo.dsl --ast
-```
+**Por que uma DSL?** O vocabulário concentra operações e regras do domínio, eliminando parte da sintaxe geral dos scripts. Há custo de desenvolver a linguagem; não comprovamos maior facilidade de aprendizagem.
 
-Mostre um token com posição e um nó Estacionar. Explique que o parser apenas monta a estrutura; ele não modifica vagas. A primeira palavra de cada comando determina qual produção reconhecer.
+**O que é import?** Traz um módulo, classe ou função para o arquivo. dataclass gera a estrutura dos nós; re reconhece padrões; http.server atende a interface; os imports com ponto são do próprio pacote parkingdsl.
 
-**3:30-4:30 - Execução válida.** Execute:
+**O que é AST?** Uma árvore de objetos que registra a estrutura do programa sem depender de sua formatação. Cada comando tem posição para diagnóstico.
 
-```console
-python main.py examples/01_ciclo_completo.dsl --trace --verify
-python main.py examples/02_ocupacao.dsl
-```
+**Tabela de símbolos é igual ao estacionamento?** Não. A tabela resolve nomes, tipos e escopos. O estado guarda vagas, presença e ocupação. Um alias local pode sumir enquanto o carro continua estacionado.
 
-No primeiro, mostre sete comandos aceitos, três vagas livres e ninguém presente. No segundo, mostre os três veículos estacionados em categorias distintas. Categoria é atributo da vaga, sem verificação de credencial.
+**Tipos são verificados antes de tudo?** Não. O parsing completo vem primeiro; a resolução e checagem de tipos acontecem antes de cada comando durante a interpretação.
 
-**4:30-6:00 - Erros bem definidos.** Execute:
+**Por que liberar e sair são diferentes?** Liberar remove a associação à vaga; sair remove a presença. Saída de carro ainda estacionado é rejeitada.
 
-```console
-python main.py examples/04_erro_ocupada.dsl --trace --verify
-python main.py examples/05_erro_sintatico.dsl
-python main.py examples/06_erro_lexico.dsl
-```
+**Como impede carro em duas vagas?** occupied associa vaga ao veículo e vehicle_space faz o inverso. As pré-condições recusam conflitos e check_invariants confere as relações.
 
-No exemplo 04, indique E005 na linha 6, coluna 1, e A1 ainda ocupada pelo primeiro veículo. O segundo veículo entrou, mas não conseguiu estacionar. A liberação posterior não executou. Nos exemplos 05 e 06, nenhuma operação executa: erros estruturais são detectados antes da interpretação.
+**Qual biblioteca da interface?** HTML, CSS e JavaScript sem framework. O servidor é http.server da biblioteca padrão do Python. fetch conecta o botão ao interpretador, sem reimplementar a DSL em JavaScript.
 
-**6:00-7:00 - Evidências.** Execute `python run_tests.py`. Explique os grupos e abra `results/test_results.json`. Mostre que testes de erros comparam fase, código, posição e estado. O teste de modelo compara sequências com um oráculo independente.
+**Em quais artigos se baseia?** Mernik et al. e van Deursen et al. fundamentam DSLs. Lin et al. e Geng/Cassandras contextualizam estacionamento. DomainBuilder é comparação de implementação. ParkLang é comparação direta no domínio, voltada à arquitetura, enquanto este projeto executa operações.
 
-**7:00-8:30 - Resultados e limites.** Mostre as tabelas do relatório, obtidas com cinco aquecimentos e 30 medições por tamanho. Diferencie mediana de p95. Mostre que a comparação de concisão teve a mesma quantidade de linhas; não apresente esse resultado como ganho de legibilidade. Finalize com limitações reais e uma evolução possível, como persistência, que exigiria nova especificação e novos testes.
-
-## Perguntas que você precisa saber responder
-
-**O que torna isso uma DSL?** É uma linguagem externa limitada a um domínio, com vocabulário e regras próprios, e não um conjunto de instruções Python.
-
-**Por que usar Python?** Permite implementar explicitamente lexer, parser, AST e interpretador com biblioteca padrão, reduzindo dependências para execução e avaliação.
-
-**Qual a diferença entre token e nó de AST?** Token representa um elemento reconhecido no texto; nó representa uma operação completa com seus argumentos.
-
-**Por que `premium` causa erro sintático?** A produção `tipo` enumera apenas comum, pcd e idoso. A palavra é um ID léxico válido, mas não é uma categoria válida na posição esperada.
-
-**Qual a diferença entre liberar e sair?** Liberar remove a associação com a vaga; sair remove o veículo do conjunto de presentes. Sair com vaga ocupada é proibido.
-
-**Como impedir duas vagas para o mesmo veículo?** O índice inverso permite verificar em custo médio constante se o veículo já está estacionado, e os invariantes conferem sua correspondência com a ocupação.
-
-**Um erro desfaz o estacionamento inteiro?** Erro léxico ou sintático impede toda execução. Erro semântico preserva o prefixo válido e não aplica o comando que falhou nem os posteriores.
-
-**Todos os testes passarem prova corretude?** Não. É evidência para a bateria executada, reforçada pelo modelo independente. Não é prova formal nem teste em um estacionamento real.
-
-**O parser usa autômato de pilha?** É um parser escrito como funções que reconhecem as produções. Não há bloco aninhado ou expressão recursiva na gramática atual; não há necessidade de pilha crescente para reconhecer esta DSL. A arquitetura em etapas não torna a linguagem necessariamente não regular.
-
-**Por que não medir com `--verify`?** A verificação global percorre o estado depois de cada comando e acrescenta custo de depuração. O benchmark mantém as pré-condições semânticas ativas e confere os invariantes ao final, fora do intervalo medido.
-
-**Há inteligência artificial?** Não. O termo inteligente veio do domínio do artigo. Este protótipo trata a camada lógica de comandos, sem sensores, aprendizado de máquina ou reconhecimento de placas.
-
-## Checklist antes de apresentar
-
-- Extraia o ZIP; não execute arquivos ainda dentro dele.
-- Confira Python 3.10+ e rode os testes no computador da apresentação.
-- Execute os exemplos válidos e os inválidos; reconheça os erros esperados.
-- Saiba localizar lexer.py, parser.py, semantic.py e interpreter.py.
-- Leia o relatório e explique o significado dos resultados, sem decorar números.
-- Confira o enunciado do professor para nome de arquivos, forma de envio e eventuais requisitos extras.
+**O experimento prova que é melhor?** Não. Há testes, tempos em uma máquina e contagem de três pares de scripts. Não há experimento com usuários. O modelo independente dos testes é diferente do adaptador usado na comparação de concisão.

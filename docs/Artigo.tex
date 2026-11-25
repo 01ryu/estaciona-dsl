@@ -1,4 +1,4 @@
-% VERSAO CORRIGIDA: TRES AUTORES NA MESMA LINHA - 23/11/2026.
+% VERSAO 2.0: TIPOS, ESCOPOS E STUDIO - 25/11/2026.
 % Artigo completo e autocontido: cole TODO este arquivo no main.tex do Overleaf.
 % Compilador recomendado no Overleaf: pdfLaTeX. Não requer imagens ou arquivo .bib.
 % Equipe e ausência de RA preservadas conforme solicitado.
@@ -51,7 +51,7 @@ Gerenciamento de Estacionamentos Inteligentes}
 \maketitle
 
 \begin{abstract}
-Operações de estacionamento envolvem vagas, veículos e transições de ocupação que podem ser representadas por uma linguagem específica de domínio. Nesse recorte, reconhecer comandos textuais não garante que suas sequências respeitem as condições de presença e disponibilidade dos recursos. Este trabalho apresenta uma DSL interpretada para declarar vagas e executar entrada, estacionamento, liberação e saída com validação de estado. O método compreendeu especificação em EBNF, implementação de lexer e parser manuais em Python, construção de árvore sintática abstrata e avaliação por testes, modelo independente e cargas sintéticas. Foram aprovados 50 métodos de teste e, em cargas de 10, 100 e 1.000 vagas, com cinco aquecimentos e 30 repetições por tamanho, as medianas totais foram 0,294, 2,937 e 31,067 ms, enquanto um cenário equivalente utilizou nove linhas em ambas as notações e 138 caracteres na DSL frente a 204 em Python. Conclui-se que o protótipo representou as operações selecionadas e preservou os invariantes nos casos avaliados, com resultados restritos ao ambiente experimental, sem comprovação de usabilidade ou desempenho em estacionamentos reais.
+Operações de estacionamento envolvem vagas, veículos e transições de ocupação que podem ser representadas por uma linguagem específica de domínio. Nesse recorte, reconhecer comandos textuais não garante que suas sequências respeitem as condições de presença e disponibilidade dos recursos. Este trabalho apresenta uma DSL interpretada para declarar vagas e executar entrada, estacionamento, liberação e saída com validação de estado, aliases tipados, tabela de símbolos, escopos léxicos e interface local. O método compreendeu especificação em EBNF, implementação de lexer e parser manuais em Python, construção de árvore sintática abstrata e avaliação por testes, modelo independente e cargas sintéticas. Foram aprovados 81 métodos de teste e, em cargas de 10, 100 e 1.000 vagas, com cinco aquecimentos e 30 repetições por tamanho, as medianas totais foram 0,390, 3,926 e 41,079 ms, enquanto três pares equivalentes mantiveram a mesma quantidade de linhas e apresentaram razões de caracteres DSL/Python entre 0,676 e 0,787. Conclui-se que o protótipo representou as operações selecionadas e preservou os invariantes nos casos avaliados, com resultados restritos ao ambiente experimental, sem comprovação de usabilidade ou desempenho em estacionamentos reais.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -72,7 +72,7 @@ O objetivo geral foi desenvolver uma Linguagem Específica de Domínio, ou DSL, 
 A implementação adota Python e interpretação por caminhamento de árvore. A linguagem é externa, com arquivos próprios, palavras-chave em português e execução sequencial. A decisão segue um recorte de construção de DSL que exige escolhas explícitas nas etapas de análise, projeto e implementação \cite{mernik2005}. A avaliação compara estados e diagnósticos com expectativas derivadas da especificação e mede o processamento de programas sintéticos de tamanhos controlados.
 
 
-Os resultados registrados aprovaram os 50 métodos de teste e apresentaram mediana total de 31,067 ms para a carga de 1.000 vagas e 5.000 comandos. A comparação de concisão identificou menor número de caracteres em um cenário da DSL, com a mesma quantidade de linhas do script Python. Esses achados sustentam a contribuição de uma especificação acompanhada de implementação e avaliação reproduzível para o estudo de linguagens; a validade é restrita aos cenários e ao ambiente utilizados, sem estudo com usuários ou avaliação em estacionamento real.
+Os resultados registrados aprovaram os 81 métodos de teste e apresentaram mediana total de 41,079 ms para a carga de 1.000 vagas e 5.000 comandos. A comparação de concisão identificou menor número de caracteres em três cenários da DSL, com a mesma quantidade de linhas do script Python. Esses achados sustentam a contribuição de uma especificação acompanhada de implementação e avaliação reproduzível para o estudo de linguagens; a validade é restrita aos cenários e ao ambiente utilizados, sem estudo com usuários ou avaliação em estacionamento real.
 
 
 A Seção II apresenta a fundamentação e os trabalhos relacionados. A Seção III descreve a linguagem, a arquitetura e o método experimental. A Seção IV apresenta os resultados e sua análise, e a Seção V reúne a conclusão e as possibilidades de continuidade.
@@ -83,7 +83,7 @@ A Seção II apresenta a fundamentação e os trabalhos relacionados. A Seção 
 Uma DSL concentra suas construções em um domínio de aplicação. Van Deursen, Klint e Visser \cite{deursen2000} organizam a literatura sobre essas linguagens e suas estratégias de implementação. Nesta proposta, a especialização aparece nos comandos vaga, entrada, estacionar, liberar e saida. O vocabulário aproxima a notação das operações selecionadas, mas sua presença isolada não demonstra maior usabilidade.
 
 
-Mernik, Heering e Sloane \cite{mernik2005} discutem padrões nas fases de decisão, análise, projeto e implementação de DSLs. Essa organização fundamenta a separação entre necessidades do domínio e escolhas sobre a linguagem. A construção de ferramentas próprias também introduz custo de desenvolvimento e manutenção. Por esse motivo, o escopo foi limitado a cinco formas de comando, sem funções, laços ou expressões de propósito geral.
+Mernik, Heering e Sloane \cite{mernik2005} discutem padrões nas fases de decisão, análise, projeto e implementação de DSLs. Essa organização fundamenta a separação entre necessidades do domínio e escolhas sobre a linguagem. A construção de ferramentas próprias também introduz custo de desenvolvimento e manutenção. Por esse motivo, o escopo reúne cinco operações físicas, declarações de aliases tipados e blocos léxicos, sem funções, laços ou expressões de propósito geral.
 
 
 No domínio de aplicação, Lin et al. \cite{lin2017} apresentam um levantamento de soluções de estacionamento inteligente, considerando funcionalidades e tecnologias associadas. O estudo contextualiza o problema, mas não fornece a especificação da DSL aqui implementada. O protótipo utiliza apenas a camada lógica: eventos são fornecidos por programas textuais, sem aquisição física de informações.
@@ -92,7 +92,7 @@ No domínio de aplicação, Lin et al. \cite{lin2017} apresentam um levantamento
 Geng e Cassandras \cite{geng2013} propõem alocação e reserva de vagas com base em uma função de custo do motorista e otimização de recursos. No presente projeto, a vaga é indicada explicitamente pelo programa, sem alocação ótima, reserva ou precificação. O interesse comum está na representação consistente de recursos; as finalidades e os critérios de avaliação são distintos.
 
 
-Como abordagem recente de engenharia de linguagens, Stojanovi\'{c}, Kova\v{c}evi\'{c} e Kosar \cite{domainbuilder2026} apresentam DomainBuilder, um framework em C++ com interpretador extensível e sintaxe baseada em S-expressões. Seu caso de uso envolve pipelines de dados e combina operadores de domínio com construções gerais. A Tabela~\ref{tab:t1} compara características desse framework com o presente protótipo: aqui, a sintaxe própria e a ausência de construções gerais delimitam o escopo acadêmico, sem estabelecer vantagem de desempenho entre ferramentas com finalidades e cargas diferentes.
+Como abordagem recente de engenharia de linguagens, Stojanovi\'{c}, Kova\v{c}evi\'{c} e Kosar \cite{domainbuilder2026} apresentam DomainBuilder, um framework em C++ com interpretador extensível e sintaxe baseada em S-expressões. Seu caso de uso envolve pipelines de dados e combina operadores de domínio com construções gerais. A Tabela~\ref{tab:t1} compara características desse framework com o presente protótipo: aqui, a sintaxe própria e as construções de domínio delimitam o escopo acadêmico, sem estabelecer vantagem de desempenho entre ferramentas com finalidades e cargas diferentes.
 
 
 \begin{table*}[!t]
@@ -107,13 +107,20 @@ Como abordagem recente de engenharia de linguagens, Stojanovi\'{c}, Kova\v{c}evi
 \textbf{Abordagem} & \textbf{Sintaxe e execução} & \textbf{Construções gerais} & \textbf{Validação do estacionamento} \\
 \midrule
 DomainBuilder \cite{domainbuilder2026} & S-expressões; interpretador extensível em C++. & Sim; combinadas com operadores do domínio. & Não é o caso de uso apresentado. \\
-\textbf{Protótipo deste trabalho} & \textbf{Comandos em português; AST e interpretador em Python.} & \textbf{Não; cinco operações específicas.} & \textbf{Presença, declaração, ocupação e índice inverso.} \\
+\textbf{Protótipo deste trabalho} & \textbf{Comandos em português; AST e interpretador em Python.} & \textbf{Cinco operações, aliases tipados e blocos.} & \textbf{Tipos, escopos, presença e ocupação.} \\
 \bottomrule
 \end{tabularx}
 \end{table*}
 
+ParkLang, de Ozkaya, Turunc e Cobanoglu~\cite{parklang2026}, é uma linguagem do mesmo domínio, voltada à modelagem arquitetural de sistemas de estacionamento. O trabalho apresenta uma notação gráfica baseada em níveis do modelo C4 e suporte de ferramenta. Diferentemente desse propósito, EstacionaDSL interpreta comandos textuais e verifica presença e ocupação. Portanto, o diferencial aqui é o nível operacional executável e a exposição didática do processamento de linguagem, não uma alegação de inexistência de DSLs de estacionamento ou superioridade entre ferramentas. Não se realizou execução comparativa de ParkLang.
+
 As referências clássicas são empregadas para conceitos estabelecidos e contextualização do domínio, enquanto o trabalho de 2026 situa uma abordagem contemporânea de implementação. A seleção não constitui revisão sistemática. A comparação justifica manter uma gramática própria e separar estrutura de estado: essa decisão torna explícitas as etapas estudadas na disciplina e delimita as regras que serão avaliadas, orientando os materiais e métodos a seguir.
 
+
+\subsection{Fundamentos de reconhecimento e interpretação}
+As classes de identificadores e literais são descritas por expressões regulares. Para um identificador, um autômato conceitual exige uma letra inicial e aceita letras, dígitos ou sublinhado nas transições seguintes. O lexer implementa varredura e correspondência desses padrões, registrando posições. O parser descendente recursivo reconhece comandos por seus tokens iniciais distintos e utiliza a pilha de chamadas nos blocos aninhados. A gramática abstrata admite recursão; a implementação restringe a profundidade a 32 blocos para limitar recursos.
+
+A AST representa construções relevantes, independentemente de espaços e quebras de linha. A interpretação percorre essa estrutura e consulta ambientes de símbolos. Reconhecimento sintático, compatibilidade de tipos e regras de ocupação são problemas distintos: uma entrada pode ter sintaxe correta e referenciar uma vaga onde se exige veículo. A escolha de uma DSL explicita essas restrições e reduz parte da sintaxe incidental de scripts gerais, ao custo de desenvolver e manter gramática, diagnósticos e ferramentas. A evidência de concisão não substitui uma avaliação humana dessa escolha.
 
 \section{Materiais e Métodos}
 
@@ -125,7 +132,7 @@ A pesquisa é aplicada, com desenvolvimento de protótipo e avaliação experime
 O programa recebe um arquivo .dsl em UTF-8, produz diagnósticos e apresenta o estado final no terminal. Também permite inspecionar tokens e AST e exportar resultados em JSON. As estruturas permanecem em memória durante uma execução; cada programa inicia com estado independente. O código emprega recursos de Python 3.10 ou superior, e a execução avaliada utilizou CPython 3.15.2.
 
 
-São contempladas declaração de vagas, entrada, estacionamento, liberação e saída. As categorias comum, pcd e idoso são atributos das vagas. Como não há credenciais ou perfis de condutores na sintaxe, não ocorre verificação de elegibilidade por categoria. Cobrança, reservas, persistência, sensores, integração web e operações simultâneas ficaram fora desta versão.
+São contempladas declaração de vagas, entrada, estacionamento, liberação e saída. As categorias comum, pcd e idoso são atributos das vagas. Como não há credenciais ou perfis de condutores na sintaxe, não ocorre verificação de elegibilidade por categoria. Cobrança, reservas, persistência, sensores, integração com serviços externos e operações simultâneas ficaram fora desta versão.
 
 
 \subsection{Sintaxe concreta e regras léxicas}
@@ -145,10 +152,10 @@ saida "ABC1234"
 }
 \end{lstlisting}
 
-A Listagem~\ref{lst:l2} apresenta a EBNF. Chaves fora de aspas representam repetição; chaves entre aspas são delimitadores literais. ID designa identificador, PLACA um literal de veículo e EOF o término da entrada.
+A Listagem~\ref{lst:l2} apresenta o subconjunto original da EBNF, estendido adiante com aliases tipados e blocos. Chaves fora de aspas representam repetição; chaves entre aspas são delimitadores literais. ID designa identificador, PLACA um literal de veículo e EOF o término da entrada.
 
 
-\begin{lstlisting}[caption={Gramática sintática em EBNF.},label={lst:l2}]
+\begin{lstlisting}[caption={Subconjunto original da gramática em EBNF.},label={lst:l2}]
 programa = "estacionamento", ID, "{",
   comando, { comando }, "}", EOF ;
 comando = declaracao | entrada | estacionar
@@ -170,13 +177,13 @@ PLACA aceita exatamente sete caracteres de [A-Z0-9] entre aspas duplas. Trata-se
 
 \subsection{Arquitetura e processamento da linguagem}
 
-O fluxo é código-fonte, tokens, AST completa, validações e execução. A implementação separa lexer.py, parser.py, ast\_nodes.py, semantic.py, interpreter.py, diagnostics.py e main.py no pacote parkingdsl. O parser constrói nós DeclararVaga, Entrada, Estacionar, Liberar e Saida, preservando a posição inicial de cada comando.
+O fluxo é código-fonte, tokens, AST completa, validações e execução. A implementação separa lexer.py, parser.py, ast\_nodes.py, semantic.py, interpreter.py, diagnostics.py, symbols.py, service.py e main.py no pacote parkingdsl. O parser constrói nós DeclararVaga, Entrada, Estacionar, Liberar, Saida, Binding e Block, preservando a posição inicial de cada comando.
 
 
 A árvore completa é construída antes de executar qualquer comando. Consequentemente, falhas léxicas e sintáticas impedem toda a execução. A sequência estacionar em A1 "ABC1234" é rejeitada pelo parser. A categoria premium também é rejeitada sintaticamente, pois as categorias válidas são enumeradas na gramática; não é tratada como erro semântico de ocupação.
 
 
-As alternativas de comando têm conjuntos FIRST disjuntos: cada uma começa com palavra-chave diferente. Um token de antecipação basta para selecionar a produção, sem retrocesso. A repetição de comandos utiliza laço, evitando profundidade de pilha proporcional ao programa. A gramática contém apenas um bloco sem aninhamento; o uso de EBNF e parser descendente não implica que esta linguagem específica seja necessariamente não regular.
+As alternativas de comando têm conjuntos FIRST disjuntos: cada uma começa com palavra-chave diferente. Um token de antecipação basta para selecionar a produção, sem retrocesso. A repetição de comandos utiliza laço, evitando profundidade de pilha proporcional ao programa. Na versão 2.0, blocos locais podem se aninhar; a profundidade da pilha acompanha esse aninhamento, limitado a 32, e não o número de comandos irmãos.
 
 
 As validações semânticas dependentes do estado são aplicadas na ordem dos comandos, imediatamente antes de cada alteração. Declarações duplicadas e referências a vagas ainda não declaradas seguem essa mesma ordem. Uma declaração posterior não torna válido um uso anterior. Ao encontrar falha semântica, o interpretador interrompe o programa: o comando rejeitado não altera o estado, os efeitos anteriores permanecem e não há reversão integral do programa.
@@ -221,6 +228,40 @@ Cada erro informa fase, código, linha, coluna e descrição. Erros semânticos 
 A opção --verify confere os invariantes após cada comando aceito. A atomicidade descrita refere-se às rejeições semânticas previstas, não a interrupções externas, falta de memória ou falhas de hardware. O protótipo é sequencial e não implementa controle de concorrência.
 
 
+\subsection{Tipos, tabela de símbolos e escopos}
+Além dos comandos físicos, a versão 2.0 admite aliases imutáveis e blocos locais. A extensão da EBNF é apresentada a seguir; entrada, saída e o primeiro operando de estacionar passam a aceitar PLACA ou ID. O destino e a liberação continuam utilizando ID.
+\begin{lstlisting}[caption={Extensão da gramática para tipos e escopos.}]
+operando = PLACA | ID ;
+definicao = "definir", ID, ":", tipo_dado,
+            "=", operando ;
+tipo_dado = "veiculo" | "vaga" ;
+bloco = "bloco", "{", { comando }, "}" ;
+\end{lstlisting}
+As alternativas de comando incluem definicao e bloco. O programa exige pelo menos um comando; blocos internos podem ser vazios. Categorias comum, pcd e idoso são atributos enumerados de vagas, não substituem os tipos de dados veiculo e vaga.
+
+Cada entrada na tabela registra nome, tipo, valor, caminho de escopo e posição de declaração. O ambiente é uma pilha de dicionários: a resolução procura primeiro no escopo atual e depois nos externos. Se $\Gamma(x)=\tau$, o identificador possui tipo $\tau$; um literal PLACA possui tipo veiculo. Uma definição anotada $x:\tau=e$ exige que o tipo resolvido de $e$ seja igual a $\tau$. Entrada e saída exigem veiculo; estacionar exige veiculo e vaga, respectivamente. Não há conversão implícita.
+
+Nomes não podem ser repetidos no mesmo ambiente nem usados antes da declaração. Um ambiente interno pode sombrear nomes externos. Ao sair do bloco, sua tabela é removida, inclusive em interrupção por erro; os efeitos físicos já aceitos continuam. Vagas físicas só podem ser declaradas globalmente, mantendo sua identidade durante a execução. Os tipos são checados sequencialmente antes de cada comando, e não em uma passagem estática completa anterior à interpretação.
+
+\begin{lstlisting}[caption={Alias global e sombreamento local.}]
+estacionamento Campus {
+  vaga A1 comum
+  definir cliente: veiculo = "ABC1234"
+  entrada cliente
+  bloco {
+    definir cliente: veiculo = "DEF5678"
+    entrada cliente
+  }
+  estacionar cliente em A1
+}
+\end{lstlisting}
+O exemplo associa A1 a ABC1234 e mantém DEF5678 presente sem vaga. T001 indica incompatibilidade de tipo, T002 nome não declarado ou fora do escopo, T003 duplicidade no mesmo ambiente e T004 declaração física local. O diagnóstico de categoria inválida permanece sintático. Destinos físicos não declarados preservam E002 por compatibilidade com a versão original.
+
+\subsection{Interface gráfica local}
+O Studio fornece editor, exemplos, abertura e salvamento de arquivos, execução, mapa de vagas e inspeção de tokens, AST, eventos e símbolos. HTML, CSS e JavaScript compõem a interface; um servidor da biblioteca padrão Python escuta somente no endereço de loopback. O código enviado segue para o mesmo lexer, parser e interpretador da CLI. Não existe um segundo interpretador em JavaScript.
+
+Cada chamada utiliza estado novo. O painel exibe o resultado da última execução e avisa quando o texto foi alterado. O serviço limita fontes a 64 KiB e 6.000 tokens; cargas maiores são executadas pela CLI. O editor não executa código Python e o servidor valida origem e caminhos. Não há hospedagem pública, autenticação ou persistência de estado. A interface apoia demonstrações, sem acrescentar cobrança ou funcionalidades externas ao domínio especificado.
+
 \subsection{Avaliação de corretude e diagnóstico}
 
 Os testes foram organizados separadamente do código de produção, com expectativas codificadas a partir da especificação. Programas válidos verificam estado final e operações aceitas. Nos inválidos, a simples rejeição não é suficiente: os testes de diagnóstico comparam fase, código e posição, enquanto os casos semânticos verificam ausência de mutação pelo comando rejeitado. A integração verifica que não há comandos posteriores executados e que erros estruturais não produzem efeitos.
@@ -246,7 +287,7 @@ Foram realizadas cinco execuções de aquecimento e trinta repetições medidas 
 A conferência global após cada comando foi desabilitada na medição para não acrescentar varreduras sucessivas do estado. As regras semânticas continuam ativas, e os invariantes são conferidos ao final, fora do intervalo, juntamente com a ausência de veículos presentes e vagas ocupadas. São reportadas mediana e percentil 95, calculado por nearest-rank: amostra na posição ceil(0,95N) da série ordenada.
 
 
-A concisão compara a Listagem~\ref{lst:l1} com um script Python equivalente apoiado em adaptador para o mesmo núcleo semântico. Contam-se linhas não vazias e não comentadas e caracteres, com formatação fixa, separação LF entre linhas e sem LF final. A contagem inclui delimitadores na DSL e importação e criação de objeto em Python. O tamanho da infraestrutura é informado separadamente. A razão de linhas é:
+A concisão compara três cenários, incluindo a Listagem~\ref{lst:l1}, com scripts Python equivalentes apoiado em adaptador para o mesmo núcleo semântico. Contam-se linhas não vazias e não comentadas e caracteres, com formatação fixa, separação LF entre linhas e sem LF final. A contagem inclui delimitadores na DSL e importação e criação de objeto em Python. O tamanho da infraestrutura é informado separadamente. A razão de linhas é:
 
 
 \begin{equation}R_L=\frac{L_{\mathrm{DSL}}}{L_{\mathrm{Python}}}.\label{eq:conc}\end{equation}
@@ -264,7 +305,7 @@ O material suplementar está disponível no repositório público EstacionaDSL~\
 O protótipo implementou as cinco formas de comando e os três atributos de categoria previstos. A execução da Listagem~\ref{lst:l1} aceitou sete comandos e terminou com A1, A2 e A3 livres, conjunto P vazio e associações O e I vazias. Cenários adicionais mantiveram múltiplos veículos estacionados, permitiram reentrada após saída e realocação após liberação.
 
 
-Os 50 métodos de teste foram aprovados, sem falhas ou erros na execução registrada. A Tabela~\ref{tab:t3} apresenta a distribuição por família. O método de modelo reúne as dez sementes e suas sequências; não representa apenas uma operação isolada. A taxa de 100\% é relativa à bateria executada e não deve ser interpretada como cobertura integral de todos os programas possíveis.
+Os 81 métodos de teste foram aprovados, sem falhas ou erros na execução registrada. A Tabela~\ref{tab:t3} apresenta a distribuição por família. O método de modelo reúne as dez sementes e suas sequências; não representa apenas uma operação isolada. A taxa de 100\% é relativa à bateria executada e não deve ser interpretada como cobertura integral de todos os programas possíveis.
 
 
 \begin{table}[!t]
@@ -284,7 +325,9 @@ Semântica e invariantes & 14 & 14 & 100\% \\
 Programas válidos & 7 & 7 & 100\% \\
 Integração e CLI & 9 & 9 & 100\% \\
 Modelo independente & 1 & 1 & 100\% \\
-Total & 50 & 50 & 100\% \\
+Tipos, escopos e serviço & 21 & 21 & 100\% \\
+HTTP local & 10 & 10 & 100\% \\
+Total & 81 & 81 & 100\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -304,93 +347,40 @@ Esses resultados distinguem validade estrutural e validade operacional. A catego
 
 
 \subsection{Desempenho observado}
-
-Os ensaios foram executados em Windows 11, compilação 26200, com CPython 3.15.2, processador Intel Core i7-9700K a 3,60 GHz e oito processadores lógicos. A memória física reportada foi 31,92 GiB, com 19,86 GiB disponíveis na coleta. Os dados correspondem ao ambiente registrado em 23 de novembro de 2026, não a uma configuração mínima exigida.
-
-
-A Tabela~\ref{tab:t4} apresenta tamanho da entrada e tempos totais. Os três tamanhos totalizam 90 repetições medidas, além dos aquecimentos. O total compreende as três etapas em uma mesma execução; suas medianas são calculadas diretamente dos totais observados.
-
-
+Os ensaios da versão 2.0 foram realizados em 25 de novembro de 2026, em Windows 11, CPython 3.15.2, Intel Core i7-9700K e oito processadores lógicos, com 31,92 GiB de memória física. Foram mantidos cinco aquecimentos e 30 repetições por tamanho. Os resultados atualizados substituem os da versão inicial.
 \begin{table}[!t]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.15}
-\caption{Tamanho das cargas e tempo total de processamento}
+\centering\footnotesize
+\caption{Cargas e tempos totais do núcleo na versão 2.0}
 \label{tab:t4}
-\begin{tabularx}{\columnwidth}{@{}Yrrr@{}}
-\toprule
-\textbf{Vagas / comandos} & \textbf{Bytes} & \textbf{Mediana (ms)} & \textbf{p95 (ms)} \\
-\midrule
-10 / 50 & 892 & 0,294 & 0,315 \\
-100 / 500 & 8.905 & 2,937 & 3,575 \\
-1.000 / 5.000 & 91.708 & 31,067 & 33,498 \\
-\bottomrule
-\end{tabularx}
-\par\smallskip
-\begin{minipage}{\columnwidth}\scriptsize Fonte: 30 repetições por configuração; cinco aquecimentos não incluídos nas estatísticas.\end{minipage}
+\begin{tabularx}{\columnwidth}{@{}Yrrr@{}}\toprule
+Vagas/comandos & Bytes & Mediana (ms) & p95 (ms) \\\midrule
+10 / 50 & 892 & 0,390 & 0,416 \\
+100 / 500 & 8905 & 3,926 & 3,959 \\
+1000 / 5000 & 91708 & 41,079 & 44,962 \\
+\bottomrule\end{tabularx}
 \end{table}
+A medição compreende lexer, parser e interpretação, incluindo tabela de símbolos, validações e eventos. Exclui interface, comunicação HTTP, ordenação e impressão dos resultados. Não houve estudo da latência visual do painel. As estatísticas detalhadas por etapa e todas as amostras estão em benchmark.json e benchmark.csv.
 
-A Tabela~\ref{tab:t5} separa as etapas, mostrando o maior custo da tokenização nesta implementação. Para 1.000 vagas, sua mediana foi 20,473 ms, frente a 3,628 ms de parsing e 6,604 ms de interpretação. As medianas por etapa são independentes; sua soma não precisa coincidir com a mediana total, e o mesmo cuidado se aplica aos percentis.
+O crescimento nos três pontos caracteriza as cargas escolhidas, sem provar complexidade assintótica ou garantias de tempo real. A tokenização percorre caracteres, o parsing percorre tokens e a resolução de nomes consulta até a profundidade de escopo, limitada a 32. Consultas a tabelas hash têm custo médio constante para chaves curtas, não pior caso garantido. A verificação global dos invariantes após cada comando é desabilitada no benchmark, mas mantida nos testes e no painel.
 
-
-\begin{table*}[!t]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.15}
-\caption{Tempos por etapa em milissegundos: mediana / p95}
-\label{tab:t5}
-\begin{tabularx}{\textwidth}{@{}rYYY@{}}
-\toprule
-\textbf{Vagas} & \textbf{Lexer} & \textbf{Parser} & \textbf{Interpretação} \\
-\midrule
-10 & 0,195 / 0,213 & 0,036 / 0,036 & 0,062 / 0,067 \\
-100 & 1,983 / 2,604 & 0,347 / 0,370 & 0,607 / 0,690 \\
-1.000 & 20,473 / 23,130 & 3,628 / 4,837 & 6,604 / 7,726 \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-Ao multiplicar a carga por dez, a mediana total passou de 0,294 para 2,937 ms e depois para 31,067 ms. O crescimento é aproximadamente proporcional nestes pontos, com diferenças compatíveis com custos de execução e do ambiente. A amostra de três tamanhos não prova comportamento assintótico, estabilidade sob cargas maiores ou atendimento a requisitos de tempo real.
-
-
-O lexer realiza varredura linear no tamanho do texto, e o parser percorre os tokens. Com chaves curtas, consultas e atualizações em dicionários e conjuntos têm custo médio constante; a interpretação tem, sob essa hipótese e sem verificação global por comando, custo médio linear no número de instruções. Não se afirma pior caso constante para tabelas hash. A ordenação do estado final acrescenta custo que foi excluído da medição, assim como a impressão.
-
-
-Em relação ao interpretador extensível de DomainBuilder \cite{domainbuilder2026}, os resultados aqui apresentados verificam regras de um domínio mais restrito, sem composição com construções gerais. As escolhas de linguagem e de carga diferem; por isso, a comparação é arquitetural, e não uma classificação numérica de desempenho entre os sistemas.
-
-
-Tokens, AST e eventos são mantidos em memória, de modo que o consumo cresce com a entrada e o número de comandos. Não houve medição de pico de memória ou comparação com outra implementação. Portanto, os resultados caracterizam o protótipo no ambiente avaliado, sem sustentar superioridade sobre linguagens de propósito geral ou sistemas comerciais.
-
+As cargas medidas usam ciclos físicos e escopo global. Exercitam o custo da tabela de símbolos de vagas, mas não quantificam o impacto de diferentes profundidades de blocos. Tokens, AST, símbolos e eventos permanecem em memória. Não se mediu pico de memória nem desempenho relativo a ParkLang, DomainBuilder ou outra implementação.
 
 \subsection{Concisão e infraestrutura}
-
-A Tabela~\ref{tab:t6} apresenta a contagem da Listagem~\ref{lst:l1} e de seu cenário equivalente em Python. Ambos utilizaram nove linhas não vazias e não comentadas, resultando em R\textsubscript{L} = 1,00. A DSL utilizou 138 caracteres, frente a 204 em Python, razão de aproximadamente 0,676 e redução de 32,35\% de caracteres neste cenário.
-
-
+A comparação foi ampliada para três pares fixos: ciclo completo, ocupação simultânea e realocação. Verificou-se igualdade de estado final e tipos de operação antes da contagem. A Tabela~\ref{tab:t6} mostra que a quantidade de linhas foi igual em cada par; os caracteres foram menores na DSL sob a formatação escolhida.
 \begin{table}[!t]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.15}
-\caption{Concisão no cenário equivalente}
+\centering\footnotesize
+\caption{Três cenários equivalentes: DSL/Python}
 \label{tab:t6}
-\begin{tabularx}{\columnwidth}{@{}Yrr@{}}
-\toprule
-\textbf{Indicador} & \textbf{DSL} & \textbf{Python} \\
-\midrule
-Linhas não vazias e não comentadas & 9 & 9 \\
-Caracteres sob convenção fixa & 138 & 204 \\
-\bottomrule
-\end{tabularx}
+\begin{tabularx}{\columnwidth}{@{}Yrrr@{}}\toprule
+Cenário & Linhas & Caracteres & Razão \\\midrule
+Ciclo & 9/9 & 138/204 & 0,676 \\
+Ocupação & 11/11 & 200/254 & 0,787 \\
+Realocação & 11/11 & 181/239 & 0,757 \\
+\bottomrule\end{tabularx}
 \end{table}
+A infraestrutura parkingdsl contém 584 linhas físicas, e o adaptador Python acrescenta 27. O adaptador utiliza o mesmo núcleo semântico e não constitui implementação independente; o modelo independente citado nos testes é outro artefato. A comparação não inclui o tamanho da interface e não avalia a concisão dos novos aliases ou blocos. Os três cenários continuam sendo uma amostra pequena e selecionada pelos autores.
 
-O resultado indica menor quantidade de caracteres sob a convenção adotada, mas não redução de linhas. A formatação escolhida, os delimitadores e o custo da importação influenciam a contagem; outros cenários podem produzir razões diferentes. Nenhuma dessas métricas permite concluir que a DSL é mais fácil de ler ou aprender.
-
-
-O pacote de produção parkingdsl totalizou 382 linhas físicas de Python, e o adaptador python\_api.py acrescentou 27. O cenário Python depende do mesmo núcleo de execução e, portanto, essas parcelas não descrevem duas infraestruturas independentes. A informação explicita o custo de suporte omitido quando se observa apenas o script do cenário.
-
+As razões descrevem tamanho de scripts e sofrem influência da formatação e das importações. Não demonstram menor dificuldade, tempo de aprendizagem ou produtividade. Não foi realizado estudo com participantes. A justificativa da DSL é expressar operações e restrições de forma explícita; a medição fornece evidência descritiva limitada dessa escolha.
 
 \subsection{Limitações e ameaças à validade}
 
@@ -410,8 +400,8 @@ A revisão medida é identificada em benchmark.json por SHA-256 dos nomes e byte
 
 
 \begin{lstlisting}[caption={SHA-256 da revisão medida; concatenam-se as duas linhas.},label={lst:l3}]
-291fc6ef8a4897896e3e6543b5c6b183
-5bf640679d605ce6839843ce866cc0cb
+f350938cd9ca4ee38013e137f79ea143
+3dbe768c087889b1f83c59cef201f456
 \end{lstlisting}
 
 \section{Conclusão}
@@ -419,14 +409,16 @@ A revisão medida é identificada em benchmark.json por SHA-256 dos nomes e byte
 Este trabalho especificou e implementou uma DSL externa e interpretada para operações elementares de estacionamento. A solução reúne gramática, lexer, parser descendente recursivo, AST, regras semânticas e interpretação sequencial em Python. A separação entre reconhecimento estrutural e validação de estado permitiu produzir diagnósticos localizáveis e definir explicitamente os efeitos de interrupções.
 
 
-Em resposta à questão de pesquisa, a DSL representou o conjunto de cinco operações selecionado e preservou os invariantes nos cenários avaliados. Os 50 métodos de teste foram aprovados, incluindo estados parciais, ausência de efeitos de comandos inválidos e comparação com modelo independente. Essa evidência sustenta o atendimento aos casos de aceitação implementados, sem constituir prova formal de corretude.
+Em resposta à questão de pesquisa, a DSL representou o conjunto de cinco operações selecionado e preservou os invariantes nos cenários avaliados. Os 81 métodos de teste foram aprovados, incluindo estados parciais, ausência de efeitos de comandos inválidos e comparação com modelo independente. Essa evidência sustenta o atendimento aos casos de aceitação implementados, sem constituir prova formal de corretude.
 
 
-A avaliação caracterizou o custo do processamento neste ambiente e identificou a tokenização como etapa de maior tempo observado. A análise de concisão mostrou economia de caracteres em um cenário, sem ganho de linhas nem comprovação de usabilidade. Assim, os resultados oferecem uma base verificável para demonstrações e exercícios de processamento de linguagens, sem qualificar o protótipo como sistema operacional de estacionamento.
+A avaliação caracterizou o custo do processamento neste ambiente e identificou a tokenização como etapa de maior tempo observado. A análise de concisão mostrou economia de caracteres em três cenários, sem ganho de linhas nem comprovação de usabilidade. Assim, os resultados oferecem uma base verificável para demonstrações e exercícios de processamento de linguagens, sem qualificar o protótipo como sistema operacional de estacionamento.
 
 
 A contribuição final é uma implementação acompanhada de especificação e evidências reproduzíveis para estudo de processamento de linguagens. Como continuidade, podem ser investigados persistência, perfis de condutores, novas operações e tratamento de concorrência, cada qual acompanhado de revisão da semântica e de novos testes. Avaliações com usuários e medições em outras máquinas e cargas são necessárias antes de formular conclusões sobre facilidade de uso, robustez operacional ou aplicação real.
 
+
+Os principais desafios de implementação foram separar presença de ocupação, preservar o prefixo válido em erros semânticos e restaurar ambientes após blocos. Foram tratados por índices inversos, validação antes de mutação e remoção de escopo em finally. A revisão acrescentou tipos e escopos explícitos e tornou o processamento observável na interface. Como evolução experimental, são necessários participantes reais e cenários externos aos elaborados pelos autores antes de afirmar ganhos de usabilidade.
 
 \begin{thebibliography}{00}
 
@@ -444,6 +436,9 @@ A. van Deursen, P. Klint e J. Visser, ``Domain-specific languages: An annotated 
 
 \bibitem{domainbuilder2026}
 A. Stojanovi\'{c}, \v{Z}. Kova\v{c}evi\'{c} e T. Kosar, ``Design and implementation of a domain-specific language framework using S-expressions,'' \emph{Journal of Computer Languages}, vol.~87, art.~101398, 2026, doi: \href{https://doi.org/10.1016/j.cola.2026.101398}{10.1016/j.cola.2026.101398}.
+
+\bibitem{parklang2026}
+M. Ozkaya, A. Turunc e U. Cobanoglu, ``Towards an architecture modeling language for smart car parking management systems,'' em \emph{Proceedings of MODELSWARD}, pp. 331--340, 2026. doi: \href{https://doi.org/10.5220/0014399800004058}{10.5220/0014399800004058}.
 
 \bibitem{python}
 Python Software Foundation, ``The Python standard library,'' \emph{Python 3.15.2 documentation}. [Online]. Disponível em: \href{https://docs.python.org/3/library/}{https://docs.python.org/3/library/}. Acesso em: 23 nov. 2026.
