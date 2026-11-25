@@ -1,14 +1,19 @@
 'use strict';
+// Atalho para localizar elementos pelo id. O JavaScript cuida da tela; a DSL roda em Python.
 const $ = id => document.getElementById(id);
 let examples = [], dirty = false, busy = false, lastSource = null;
 const labels = { '01_ciclo_completo':'01 · Ciclo completo', '02_ocupacao':'02 · Ocupação', '03_realocacao':'03 · Realocação', '08_tipos_e_escopos':'08 · Tipos e escopos', '09_erro_tipo':'09 · Erro de tipo', '10_erro_escopo':'10 · Erro de escopo' };
 const car = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l2-6h12l2 6M3 11h18v8H3zM5 19v2m14-2v2M6 15h3m6 0h3"/></svg>';
+// Usa textContent: valores e mensagens são exibidos como texto, não como HTML.
 function node(tag, text, cls) { const el=document.createElement(tag); if(text!==undefined)el.textContent=text; if(cls)el.className=cls; return el; }
 function notice(text,error=false){$('notice').textContent=text;$('notice').className='notice'+(error?' error':'');}
+// Avisa quando o resultado mostrado pertence ao código anterior.
 function edited(){dirty=true;$('line-count').textContent=$('source').value.split('\n').length+' linhas';if(lastSource!==null && $('source').value!==lastSource){$('status').textContent='Código alterado · execute novamente';$('status').className='status';$('edit-hint').textContent='O resultado abaixo corresponde à última execução.';}}
 function setSource(source){$('source').value=source;edited();dirty=false;}
 function confirmReplace(){return !dirty || window.confirm('Substituir o código editado? Salve o arquivo antes se quiser mantê-lo.');}
+// Monta tabelas reutilizadas nas abas de tokens e símbolos.
 function table(headers, rows){const t=node('table'),head=node('thead'),tr=node('tr');headers.forEach(h=>tr.append(node('th',h)));head.append(tr);t.append(head);const body=node('tbody');rows.forEach(row=>{const r=node('tr');row.forEach(v=>r.append(node('td',String(v))));body.append(r);});t.append(body);return t;}
+// Atualiza contadores, vagas, eventos, AST e escopos usando a resposta do servidor.
 function render(data){const s=data.state, entries=Object.entries(s.spaces), count=Object.keys(s.occupied).length;
  $('park-name').textContent=data.name || 'Seu estacionamento';$('total').textContent=entries.length;$('free').textContent=entries.length-count;$('occupied').textContent=count;$('occupancy').textContent=(entries.length?Math.round(count/entries.length*100):0)+'% de ocupação';
  $('status').textContent=data.error?'Execução interrompida':'Execução concluída';$('status').className='status '+(data.error?'error':'success');
@@ -22,12 +27,19 @@ function render(data){const s=data.state, entries=Object.entries(s.spaces), coun
  if(!data.symbols.length)$('view-symbols').append(node('p','Nenhum símbolo declarado.','empty'));
  if(data.error){const e=data.error;notice(e.code+' · '+e.message+'\nLinha '+e.line+', coluna '+e.column+'. Os comandos anteriores aceitos foram preservados.',true);}else notice('Programa concluído. Explore o registro, os tokens, a árvore sintática e os escopos abaixo.');
 }
+// fetch envia o texto para /api/run; await aguarda a resposta sem bloquear a página.
+// catch exibe falhas; finally reabilita o botão mesmo se ocorrer um erro.
 async function run(){if(busy)return;busy=true;const source=$('source').value;$('run').disabled=true;$('run').textContent='Executando…';try{const res=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source})});const data=await res.json();if(!res.ok)throw Error(data.error||'Não foi possível executar.');render(data);lastSource=source;$('edit-hint').textContent='Cada execução começa com um estacionamento vazio.';if($('source').value!==source)edited();}catch(e){notice('Falha ao executar: '+e.message+' Verifique se o terminal do painel está aberto.',true);$('status').textContent='Execução indisponível';$('status').className='status error';}finally{busy=false;$('run').disabled=false;$('run').textContent='▶ Executar';}}
+// Eventos ligam edição e clique às funções; Ctrl+Enter executa o programa.
 $('source').addEventListener('input',edited);$('source').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run();}});$('run').addEventListener('click',run);
 $('load').addEventListener('click',()=>{const example=examples[Number($('examples').value)];if(example&&confirmReplace()){setSource(example.source);notice('Exemplo carregado. Clique em Executar para atualizar o resultado.');}});
+// Abre um arquivo local no editor; a execução continua sendo uma ação separada.
 $('open').addEventListener('click',()=> $('file').click());$('file').addEventListener('change',async()=>{const f=$('file').files[0];if(!f)return;try{if(f.size>65536)throw Error('O arquivo deve ter no máximo 64 KiB.');if(confirmReplace()){setSource(await f.text());notice('Arquivo '+f.name+' carregado. Clique em Executar.');}}catch(e){notice(e.message,true);}finally{$('file').value='';}});
+// Cria um download .dsl; salva o código, não o estado físico do estacionamento.
 $('save').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([$('source').value],{type:'text/plain;charset=utf-8'})),a=node('a');a.href=url;a.download='estacionamento.dsl';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);dirty=false;});
 $('help-toggle').addEventListener('click',()=>{$('help').hidden=!$('help').hidden;$('help-toggle').setAttribute('aria-expanded',String(!$('help').hidden));});
+// Alterna abas e permite navegação com as setas do teclado.
 const tabs=[...document.querySelectorAll('[data-tab]')];function selectTab(tab){tabs.forEach(t=>{const active=t===tab;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;$('view-'+t.dataset.tab).hidden=!active;});}tabs.forEach((t,i)=>{t.addEventListener('click',()=>selectTab(t));t.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;if(e.key==='Home')next=0;if(e.key==='End')next=tabs.length-1;if(next!==undefined){e.preventDefault();selectTab(tabs[next]);tabs[next].focus();}});});
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+// Ao abrir a página, carrega exemplos do servidor e preenche o editor.
 (async()=>{try{const res=await fetch('/api/examples');if(!res.ok)throw Error('Servidor indisponível');examples=await res.json();$('examples').replaceChildren();examples.forEach((e,i)=>{const o=node('option',labels[e.name]||e.name.replaceAll('_',' '));o.value=i;$('examples').append(o);});const initial=Math.max(0,examples.findIndex(e=>e.name==='08_tipos_e_escopos'));$('examples').value=initial;if(examples[initial])setSource(examples[initial].source);}catch(e){notice('Não foi possível carregar os exemplos. '+e.message,true);$('load').disabled=true;}})();
