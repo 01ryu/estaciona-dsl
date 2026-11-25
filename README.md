@@ -171,3 +171,7 @@ Em `estacionar`, a ordem fixa é: existência da vaga, presença do veículo, di
 - `results/`: evidências reproduzíveis e saídas de demonstração.
 
 O escopo é acadêmico e sequencial, com estado em memória. Cobrança, reservas, sensores, IA, persistência e concorrência ficaram fora da versão proposta no artigo. A implementação não precisa de conexão à internet. A gramática, os exemplos, os testes e os scripts de medição acompanham o código para permitir avaliação e alterações. Use o roteiro para compreender as decisões e praticar a execução antes de apresentar.
+
+## Código comentado para apresentação
+
+Os arquivos têm comentários didáticos em português. Siga a ordem de leitura em [docs/CODIGO_COMENTADO.md](docs/CODIGO_COMENTADO.md). Esse guia também identifica a versão sem comentários usada nas medições do artigo.

@@ -19,6 +19,7 @@ from parkingdsl.interpreter import Interpreter
 ROOT = Path(__file__).resolve().parent
 
 
+# Gera cargas reproduzíveis: cada vaga recebe um ciclo completo de operações.
 def generate(n):
     if not 1 <= n <= 9_999_999:
         raise ValueError('Use entre 1 e 9.999.999 vagas.')
@@ -30,6 +31,7 @@ def generate(n):
     return '\n'.join(lines + ['}']) + '\n'
 
 
+# Identifica os bytes da versão medida. Até comentários alteram este hash.
 def code_hash():
     digest = hashlib.sha256()
     paths = sorted((ROOT / 'parkingdsl').glob('*.py')) + [ROOT / 'benchmark.py']
@@ -70,6 +72,7 @@ def environment():
                 source_sha256=code_hash(), revision_method='SHA-256 dos nomes e bytes dos módulos parkingdsl/*.py e benchmark.py')
 
 
+# Cronometra as etapas do núcleo, sem medir navegador, HTTP ou impressão.
 def measure(source):
     a = time.perf_counter_ns()
     tokens = tokenize(source)

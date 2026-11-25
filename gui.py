@@ -1,12 +1,14 @@
 """Painel local: python gui.py. Não depende de pacotes externos nem executa Python do editor."""
 import argparse
 import json
+# http.server fornece o servidor HTTP da biblioteca padrão; não há framework web.
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import webbrowser
 from parkingdsl.service import run_source
 
 ROOT = Path(__file__).resolve().parent
+# Lista fechada de arquivos servidos: evita transformar URLs em caminhos arbitrários.
 ASSETS = {'/': ('index.html', 'text/html'), '/app.css': ('app.css', 'text/css'),
           '/app.js': ('app.js', 'text/javascript')}
 
@@ -15,6 +17,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
+    # Envia JSON ou arquivo estático com tipo, tamanho e cabeçalhos de proteção.
     def reply(self, status, payload, content_type='application/json'):
         data = payload if isinstance(payload, bytes) else json.dumps(payload, ensure_ascii=False).encode('utf-8')
         self.send_response(status)
@@ -26,12 +29,14 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    # Aceita apenas o endereço local esperado e origens do próprio painel.
     def allowed(self):
         port = self.server.server_port
         hosts = {f'127.0.0.1:{port}', f'localhost:{port}'}
         origin = self.headers.get('Origin')
         return self.headers.get('Host') in hosts and (not origin or origin in {f'http://{h}' for h in hosts})
 
+    # GET carrega a interface e os exemplos disponíveis; não executa programas.
     def do_GET(self):
         if not self.allowed():
             return self.reply(403, {'error': 'Acesso permitido somente pelo endereço local.'})
@@ -43,6 +48,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, (ROOT / 'web' / name).read_bytes(), kind)
         return self.reply(404, {'error': 'Recurso não encontrado.'})
 
+    # POST /api/run recebe o texto em JSON, valida limites e chama o núcleo Python.
     def do_POST(self):
         if not self.allowed():
             return self.reply(403, {'error': 'Origem não permitida.'})
@@ -69,11 +75,13 @@ def main():
     parser.add_argument('--no-browser', action='store_true')
     args = parser.parse_args()
     try:
+        # Loopback restringe o servidor a este computador. O estado de cada execução é separado.
         server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
     except OSError as exc:
         parser.exit(1, f'Não foi possível iniciar: {exc}. Tente --port 8766.\n')
     url = f'http://127.0.0.1:{server.server_port}'
     print(f'EstacionaDSL Studio: {url}\nMantenha este terminal aberto. Ctrl+C encerra o painel.', flush=True)
+    # Abre o navegador por conveniência. O terminal precisa continuar ativo para atender a página.
     if not args.no_browser:
         webbrowser.open(url)
     try:

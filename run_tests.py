@@ -8,6 +8,7 @@ import time
 import unittest
 
 
+# Estende o relatório do unittest para guardar resultado e duração de cada método.
 class EvidenceResult(unittest.TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,6 +27,7 @@ class EvidenceResult(unittest.TextTestResult):
         super().stopTest(test)
 
 
+# Descobre os testes e grava evidências por método e família, sem inflar subcasos.
 def main():
     root = Path(__file__).resolve().parent
     suite = unittest.defaultTestLoader.discover(str(root / 'tests'))

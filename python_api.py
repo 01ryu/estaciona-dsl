@@ -4,6 +4,8 @@ from parkingdsl.diagnostics import Position
 from parkingdsl.interpreter import Interpreter
 
 
+# Adaptador para escrever os mesmos cenários em Python.
+# Reutiliza o interpretador: não é uma segunda implementação independente.
 class Parking:
     def __init__(self, name):
         self.machine = Interpreter(verify=True)
