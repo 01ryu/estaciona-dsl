@@ -1,12 +1,12 @@
 {
-  "timestamp_utc": "2026-11-23T17:27:44.509450+00:00",
+  "timestamp_utc": "2026-11-25T17:18:43.618745+00:00",
   "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
-  "total": 50,
-  "passed": 50,
+  "total": 81,
+  "passed": 81,
   "failures": 0,
   "errors": 0,
   "successful": true,
-  "seconds": 0.9782895999996981,
+  "seconds": 1.972577700000329,
   "families": {
     "IntegrationTests": {
       "total": 9,
@@ -33,312 +33,508 @@
       "passed": 10,
       "failed": 0
     },
+    "TypeScopeTests": {
+      "total": 21,
+      "passed": 21,
+      "failed": 0
+    },
     "ValidTests": {
       "total": 7,
       "passed": 7,
+      "failed": 0
+    },
+    "WebTests": {
+      "total": 10,
+      "passed": 10,
       "failed": 0
     }
   },
   "tests": [
     {
+      "test": "test_gui.WebTests.test_assets",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.047556100000292645
+    },
+    {
+      "test": "test_gui.WebTests.test_cross_origin",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.0010334999988117488
+    },
+    {
+      "test": "test_gui.WebTests.test_examples",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.018742799999017734
+    },
+    {
+      "test": "test_gui.WebTests.test_invalid_json",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.02077140000073996
+    },
+    {
+      "test": "test_gui.WebTests.test_limit",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.015232300000207033
+    },
+    {
+      "test": "test_gui.WebTests.test_missing_source",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.015458799998668837
+    },
+    {
+      "test": "test_gui.WebTests.test_run_and_isolation",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.016253399999186513
+    },
+    {
+      "test": "test_gui.WebTests.test_type_error_partial_state",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.015396999999211403
+    },
+    {
+      "test": "test_gui.WebTests.test_unknown_path",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.0149861999998393
+    },
+    {
+      "test": "test_gui.WebTests.test_wrong_content_type",
+      "family": "WebTests",
+      "status": "passou",
+      "seconds": 0.015391700000691344
+    },
+    {
       "test": "test_project.IntegrationTests.test_bom_file",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.12813930000083928
+      "seconds": 0.12943059999997786
     },
     {
       "test": "test_project.IntegrationTests.test_deterministic_sorting",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.0938265999993746
+      "seconds": 0.13377419999960694
     },
     {
       "test": "test_project.IntegrationTests.test_json_partial_state",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.09230199999910838
+      "seconds": 0.1191183999999339
     },
     {
       "test": "test_project.IntegrationTests.test_json_success",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.09433589999935066
+      "seconds": 0.11688469999899098
     },
     {
       "test": "test_project.IntegrationTests.test_lexical_failure_has_zero_effects",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.09266070000012405
+      "seconds": 0.12014249999992899
     },
     {
       "test": "test_project.IntegrationTests.test_missing_file",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.08638760000030743
+      "seconds": 0.12480990000040038
     },
     {
       "test": "test_project.IntegrationTests.test_syntax_failure_has_zero_effects",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.0891486000000441
+      "seconds": 0.12051559999963501
     },
     {
       "test": "test_project.IntegrationTests.test_tokens_and_ast_modes",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.1785662999991473
+      "seconds": 0.24261500000102387
     },
     {
       "test": "test_project.IntegrationTests.test_trace_and_marker",
       "family": "IntegrationTests",
       "status": "passou",
-      "seconds": 0.09327829999892856
+      "seconds": 0.12814089999847056
     },
     {
       "test": "test_project.LexicalTests.test_comments_are_not_supported",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00016280000090773683
+      "seconds": 0.0001004999994620448
     },
     {
       "test": "test_project.LexicalTests.test_forbidden_character",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.0001498000001447508
+      "seconds": 6.130000110715628e-05
     },
     {
       "test": "test_project.LexicalTests.test_identifiers",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00010689999908208847
+      "seconds": 3.589999869291205e-05
     },
     {
       "test": "test_project.LexicalTests.test_invalid_plate_matrix",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.000268300000243471
+      "seconds": 0.00019889999930455815
     },
     {
       "test": "test_project.LexicalTests.test_keywords_require_full_word",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00010000000111176632
+      "seconds": 2.7800000680144876e-05
     },
     {
       "test": "test_project.LexicalTests.test_plate_can_be_all_digits",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00011900000026798807
+      "seconds": 2.390000008745119e-05
     },
     {
       "test": "test_project.LexicalTests.test_token_positions",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00010579999980109278
+      "seconds": 5.0799999371520244e-05
     },
     {
       "test": "test_project.LexicalTests.test_unclosed_plate",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00011399999857530929
+      "seconds": 3.990000004705507e-05
     },
     {
       "test": "test_project.LexicalTests.test_windows_line_endings",
       "family": "LexicalTests",
       "status": "passou",
-      "seconds": 0.00011610000001383014
+      "seconds": 2.8899999961140566e-05
     },
     {
       "test": "test_project.ModelTests.test_seeded_sequences_against_independent_model",
       "family": "ModelTests",
       "status": "passou",
-      "seconds": 0.007884299999204814
+      "seconds": 0.00663910000002943
     },
     {
       "test": "test_project.SemanticTests.test_absent_vehicle",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00020290000065870117
+      "seconds": 0.00012909999895782676
     },
     {
       "test": "test_project.SemanticTests.test_diagnostic_priority",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00028310000016062986
+      "seconds": 0.00021660000129486434
     },
     {
       "test": "test_project.SemanticTests.test_duplicate_entry",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001508999994257465
+      "seconds": 8.879999950295314e-05
     },
     {
       "test": "test_project.SemanticTests.test_duplicate_space",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001522999991721008
+      "seconds": 9.279999903810676e-05
     },
     {
       "test": "test_project.SemanticTests.test_exit_absent_vehicle",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001405000002705492
+      "seconds": 7.560000085504726e-05
     },
     {
       "test": "test_project.SemanticTests.test_exit_parked_vehicle",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00017560000014782418
+      "seconds": 0.00011500000073283445
     },
     {
       "test": "test_project.SemanticTests.test_forward_declaration_is_rejected",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001467000001866836
+      "seconds": 8.70000003487803e-05
     },
     {
       "test": "test_project.SemanticTests.test_inverse_index_detection",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00011690000064845663
+      "seconds": 4.749999970954377e-05
     },
     {
       "test": "test_project.SemanticTests.test_occupied_space",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001739999988785712
+      "seconds": 0.00013799999942420982
     },
     {
       "test": "test_project.SemanticTests.test_release_free_space",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00014709999959450215
+      "seconds": 8.81000014487654e-05
     },
     {
       "test": "test_project.SemanticTests.test_release_undeclared_space",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00013690000014321413
+      "seconds": 7.310000000870787e-05
     },
     {
       "test": "test_project.SemanticTests.test_run_stops_and_preserves_partial_state",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001914000004035188
+      "seconds": 0.00011180000001331791
     },
     {
       "test": "test_project.SemanticTests.test_undeclared_space",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.00014589999955205712
+      "seconds": 8.150000030582305e-05
     },
     {
       "test": "test_project.SemanticTests.test_vehicle_in_two_spaces",
       "family": "SemanticTests",
       "status": "passou",
-      "seconds": 0.0001869000006990973
+      "seconds": 0.0001277999999729218
     },
     {
       "test": "test_project.SyntaxTests.test_ast_node_types",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00013669999862031545
+      "seconds": 6.650000068475492e-05
     },
     {
       "test": "test_project.SyntaxTests.test_case_sensitive_keywords",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00012379999861877877
+      "seconds": 5.129999954078812e-05
     },
     {
       "test": "test_project.SyntaxTests.test_empty_program",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00011269999959040433
+      "seconds": 4.380000063974876e-05
     },
     {
       "test": "test_project.SyntaxTests.test_invalid_category_is_syntax_error",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.000158200000441866
+      "seconds": 4.6799999836366624e-05
     },
     {
       "test": "test_project.SyntaxTests.test_missing_close_brace",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00013310000031196978
+      "seconds": 4.6099999963189475e-05
     },
     {
       "test": "test_project.SyntaxTests.test_missing_em",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00021430000015243422
+      "seconds": 4.749999970954377e-05
     },
     {
       "test": "test_project.SyntaxTests.test_newlines_not_required",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00017180000031657983
+      "seconds": 4.330000047048088e-05
     },
     {
       "test": "test_project.SyntaxTests.test_reserved_word_cannot_be_identifier",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00012880000031145755
+      "seconds": 4.530000114755239e-05
     },
     {
       "test": "test_project.SyntaxTests.test_trailing_program",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.00012969999988854397
+      "seconds": 4.8800000513438135e-05
     },
     {
       "test": "test_project.SyntaxTests.test_wrong_order",
       "family": "SyntaxTests",
       "status": "passou",
-      "seconds": 0.0001322999996773433
+      "seconds": 4.9000000217347406e-05
     },
     {
       "test": "test_project.ValidTests.test_article_listing",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00042190000021946616
+      "seconds": 0.0005022999994253041
     },
     {
       "test": "test_project.ValidTests.test_identifiers_are_case_sensitive",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.0001305999994656304
+      "seconds": 6.779999966965988e-05
     },
     {
       "test": "test_project.ValidTests.test_independent_executions",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00016060000052675605
+      "seconds": 7.599999844387639e-05
     },
     {
       "test": "test_project.ValidTests.test_multiple_vehicles",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00016350000078091398
+      "seconds": 0.00011310000081721228
     },
     {
       "test": "test_project.ValidTests.test_reentry",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00014660000124422368
+      "seconds": 7.639999967068434e-05
     },
     {
       "test": "test_project.ValidTests.test_release_keeps_presence",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00014759999976377003
+      "seconds": 9.140000111074187e-05
     },
     {
       "test": "test_project.ValidTests.test_relocation",
       "family": "ValidTests",
       "status": "passou",
-      "seconds": 0.00017099999968195334
+      "seconds": 0.00011549999908311293
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_alias_collision_does_not_mutate_state",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00014630000077886507
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_duplicate_same_scope",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.399999933317304e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_error_position",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00013279999984661117
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_forward_reference",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.059999890974723e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_global_physical_spaces_only",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 6.880000000819564e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_invalid_annotation",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 5.149999924469739e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_mismatch_in_declaration",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 7.129999903554562e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_mismatch_operation",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 6.480000047304202e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_mismatch_plate_as_space",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 5.5700000302749686e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_nested_parent_lookup",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.239999988290947e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_outside_scope",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 7.330000153160654e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_resource_depth_limit",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00015460000031453092
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_scope_cleanup_after_failure",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.770000022195745e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_service_fresh_state",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00014550000014423858
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_service_limits",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.011402199999793083
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_service_returns_pipeline",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00013190000026952475
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_shadow_and_restore",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00010740000107034575
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_sibling_invisible",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.929999967222102e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_typed_aliases",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 0.00011830000039481092
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_undeclared_alias",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 5.729999975301325e-05
+    },
+    {
+      "test": "test_types.TypeScopeTests.test_wrong_destination_type",
+      "family": "TypeScopeTests",
+      "status": "passou",
+      "seconds": 8.829999933368526e-05
     }
   ],
   "failures_detail": []

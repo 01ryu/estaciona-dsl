@@ -1,19 +1,51 @@
 {
-  "scenario": "Listagem 1 do artigo",
-  "dsl": {
-    "nonempty_noncomment_lines": 9,
-    "characters": 138
-  },
-  "python": {
-    "nonempty_noncomment_lines": 9,
-    "characters": 204
-  },
-  "line_ratio": 1.0,
-  "character_ratio": 0.6764705882352942,
+  "scenarios": [
+    {
+      "scenario": "01_ciclo_completo",
+      "dsl": {
+        "nonempty_noncomment_lines": 9,
+        "characters": 138
+      },
+      "python": {
+        "nonempty_noncomment_lines": 9,
+        "characters": 204
+      },
+      "line_ratio": 1.0,
+      "character_ratio": 0.6764705882352942,
+      "equivalent_state_and_operation_types": true
+    },
+    {
+      "scenario": "02_ocupacao",
+      "dsl": {
+        "nonempty_noncomment_lines": 11,
+        "characters": 200
+      },
+      "python": {
+        "nonempty_noncomment_lines": 11,
+        "characters": 254
+      },
+      "line_ratio": 1.0,
+      "character_ratio": 0.7874015748031497,
+      "equivalent_state_and_operation_types": true
+    },
+    {
+      "scenario": "03_realocacao",
+      "dsl": {
+        "nonempty_noncomment_lines": 11,
+        "characters": 181
+      },
+      "python": {
+        "nonempty_noncomment_lines": 11,
+        "characters": 239
+      },
+      "line_ratio": 1.0,
+      "character_ratio": 0.7573221757322176,
+      "equivalent_state_and_operation_types": true
+    }
+  ],
   "infrastructure_physical_lines": {
-    "dsl_modules": 382,
+    "dsl_modules": 584,
     "python_adapter": 27
   },
-  "equivalent_state_and_operation_types": true,
-  "convention": "Sem linhas vazias/comentários; LF entre linhas, sem LF final. Sem reformatação. Conta delimitadores/importações. Adapter Python depende do núcleo comum; não é implementação independente. Não mede usabilidade."
+  "convention": "Tres pares fixos: ciclo, ocupacao e realocacao. Sem linhas vazias/comentarios; LF entre linhas, sem LF final. Inclui importacoes e delimitadores. Adaptador compartilha o nucleo. Nao e implementacao independente, nao mede usabilidade nem concisao dos recursos de tipos/escopos."
 }
