@@ -5,24 +5,31 @@ from .diagnostics import DSLError
 
 
 @dataclass
+# Estado físico em memória: vagas/categorias, veículos presentes e ocupação.
+# vehicle_space é o índice inverso: permite descobrir a vaga de um veículo.
 class State:
     spaces: dict[str, str] = field(default_factory=dict)
     present: set[str] = field(default_factory=set)
     occupied: dict[str, str] = field(default_factory=dict)
     vehicle_space: dict[str, str] = field(default_factory=dict)
 
+    # Invariantes são condições que devem permanecer verdadeiras após operações.
+    # Por exemplo: todo ocupante está presente, e um veículo não ocupa duas vagas.
     def check_invariants(self):
         assert self.occupied.keys() <= self.spaces.keys(), 'Vaga não declarada ocupada'
         assert set(self.occupied.values()) <= self.present, 'Ocupante ausente'
         assert len(set(self.occupied.values())) == len(self.occupied), 'Ocupação não injetiva'
         assert self.vehicle_space == {p: v for v, p in self.occupied.items()}, 'Índice inverso inconsistente'
 
+    # Produz uma representação ordenada, útil para comparar testes e exibir JSON.
     def snapshot(self):
         return dict(spaces=dict(sorted(self.spaces.items())), present=sorted(self.present),
                     occupied=dict(sorted(self.occupied.items())),
                     vehicle_space=dict(sorted(self.vehicle_space.items())))
 
 
+# Consulta as pré-condições sem alterar o estado.
+# Só depois desta função retornar o interpretador pode aplicar o comando.
 def validate(command, state):
     def fail(code, message):
         raise DSLError('semântico', code, message, command.position)

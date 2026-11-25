@@ -1,4 +1,6 @@
 """Interface de linha de comando e exportação determinística em JSON."""
+# Bibliotecas padrão: argparse lê opções do terminal, json serializa dados,
+# Path acessa arquivos e sys fornece os canais de saída/códigos do processo.
 import argparse
 from dataclasses import asdict
 import json
@@ -11,6 +13,7 @@ from .interpreter import Interpreter
 
 
 def main(argv=None):
+    # Define o contrato da CLI: arquivo obrigatório e modos de inspeção/execução.
     parser = argparse.ArgumentParser(description='Interpretador EstacionamentoDSL')
     parser.add_argument('file', type=Path, help='Arquivo UTF-8 com extensão .dsl')
     mode = parser.add_mutually_exclusive_group()
@@ -25,6 +28,7 @@ def main(argv=None):
     source = ''
     try:
         source = args.file.read_text(encoding='utf-8-sig')
+        # O pipeline é sequencial: analisar tokens, montar a árvore e só então executar.
         tokens = tokenize(source)
         if args.tokens:
             print(json.dumps([asdict(t) for t in tokens], ensure_ascii=False, indent=2))
@@ -40,8 +44,11 @@ def main(argv=None):
         else:
             print(f'Erro ao ler arquivo: {exc}', file=sys.stderr)
         return 2
+    # Erros léxicos/sintáticos não executaram nada. Erros semânticos podem deixar
+    # o prefixo válido no estado; por isso ainda exibimos o resultado da máquina.
     except DSLError as exc:
         error, status = exc, 'interrompido'
+    # Monta uma resposta única, depois escolhe apresentação JSON ou texto.
     payload = dict(status=status, name=machine.name or None,
                    accepted_commands=len(machine.events), state=machine.state.snapshot(),
                    events=[asdict(e) for e in machine.events], error=error.as_dict() if error else None)
@@ -63,6 +70,7 @@ def main(argv=None):
             print(f'{space:<16} {category:<10} {machine.state.occupied.get(space, "livre")}')
         print(f'Presentes: {", ".join(sorted(machine.state.present)) or "nenhum"}')
         print(f'Comandos aceitos: {len(machine.events)}')
+    # Convenção de saída: 0 sucesso, 1 erro da DSL; falha de arquivo retorna 2 acima.
     return 1 if error else 0
 
 

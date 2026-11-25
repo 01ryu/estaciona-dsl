@@ -5,6 +5,8 @@ from .ast_nodes import Program, DeclararVaga, Entrada, Estacionar, Liberar, Said
 from .ast_nodes import Reference, Binding, Block
 
 
+# Etapa 2: consome tokens segundo a gramática e monta a AST (árvore sintática).
+# O parser verifica a estrutura; não modifica o estacionamento.
 class Parser:
     def __init__(self, tokens: list[Token]):
         self.tokens, self.index = tokens, 0
@@ -14,6 +16,7 @@ class Parser:
     def current(self):
         return self.tokens[self.index]
 
+    # Exige um token específico. Se estiver correto, avança; caso contrário, gera S001.
     def expect(self, kind):
         token = self.current
         if token.kind != kind:
@@ -22,6 +25,7 @@ class Parser:
         self.index += 1
         return token
 
+    # Reconhece o programa externo: estacionamento NOME { comandos } e fim de arquivo.
     def parse(self):
         self.expect('estacionamento')
         name = self.expect('ID').value
@@ -33,8 +37,11 @@ class Parser:
         self.expect('EOF')
         return Program(name, tuple(commands))
 
+    # A primeira palavra determina o tipo do comando; não é preciso tentar e voltar.
     def command(self):
         token = self.current
+        # Recursão: um bloco contém outros comandos, inclusive blocos.
+        # O limite de profundidade evita consumir a pilha de chamadas sem controle.
         if token.kind == 'bloco':
             self.expect('bloco')
             self.expect('{')
@@ -47,6 +54,7 @@ class Parser:
             self.expect('}')
             self.depth -= 1
             return Block(token.position, tuple(commands))
+        # Lê nome, anotação de tipo e valor; a compatibilidade do tipo será checada na execução.
         if token.kind == 'definir':
             self.expect('definir')
             name = self.expect('ID').value
@@ -81,6 +89,7 @@ class Parser:
             return Saida(token.position, self.operand())
         raise DSLError('sintático', 'S002', 'Esperado comando de estacionamento, definir ou bloco.', token.position)
 
+    # Distingue um literal entre aspas de uma referência a um nome da tabela de símbolos.
     def operand(self):
         if self.current.kind == 'ID':
             return Reference(self.expect('ID').value)
