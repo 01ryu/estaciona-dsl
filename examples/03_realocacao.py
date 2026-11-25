@@ -1,0 +1,11 @@
+from python_api import Parking
+p = Parking('Campus')
+p.declare('A1', 'comum')
+p.declare('A2', 'comum')
+p.enter('ABC1234')
+p.park('ABC1234', 'A1')
+p.release('A1')
+p.park('ABC1234', 'A2')
+p.release('A2')
+p.leave('ABC1234')
+p.enter('ABC1234')
