@@ -2,7 +2,13 @@
 
 Implementação do projeto **Uma Linguagem Específica de Domínio para Gerenciamento de Estacionamentos Inteligentes**, baseada no artigo fornecido. Equipe indicada no artigo: Ryan Augusto Dias, Luiz Augusto Curtolo de Souza e Bruno Barroso dos Santos; Engenharia de Computação, FHO.
 
-O programa interpreta arquivos `.dsl` em português, constrói uma AST e executa cinco operações com validação de estado. Os resultados experimentais em `results/` são medições realizadas nesta entrega. O relatório PDF explica implementação, evidências e apresentação.
+O programa interpreta arquivos `.dsl` em português, constrói uma AST e executa cinco operações com validação de estado, aliases tipados e blocos com escopo léxico. Os resultados experimentais em `results/` são medições realizadas nesta entrega. O relatório PDF explica implementação, evidências e apresentação.
+
+## Interface gráfica
+
+No Windows, abra **ABRIR_INTERFACE.bat** com dois cliques. Ou execute `python gui.py` dentro da pasta do projeto. O navegador abre em `http://127.0.0.1:8765`. Mantenha o terminal aberto; Ctrl+C encerra o servidor. Se a porta estiver ocupada, use `python gui.py --port 8766`.
+
+O Studio é um painel local: editor, exemplos, abrir/salvar `.dsl`, mapa de vagas, veículos, registro, tokens, AST e símbolos. Clique em **Executar** depois de editar. Cada execução começa com estado vazio. Não há banco de dados nem sessão persistente; salve seu código em arquivo. O painel usa o mesmo interpretador Python do terminal, não uma simulação em JavaScript. Limites do painel: 64 KiB de fonte e 6.000 tokens. Para benchmarks maiores, use a CLI.
 
 ## Comece por aqui
 
@@ -48,7 +54,27 @@ O estado final contém três vagas livres e nenhum veículo presente. `liberar` 
 
 Categorias aceitas: `comum`, `pcd`, `idoso`. São atributos; esta versão não representa credenciais de condutores. Não há validação de elegibilidade para as categorias.
 
-Identificadores seguem `[A-Za-z][A-Za-z0-9_]*`; palavras reservadas não podem ser nomes. Veículos usam exatamente sete letras maiúsculas ou dígitos entre aspas duplas. É um identificador sintético, não uma validação de placas brasileiras. A linguagem distingue maiúsculas e minúsculas. Aceita espaços, tabulações e quebras de linha; não aceita comentários, ponto e vírgula ou escapes. O bloco deve conter pelo menos um comando.
+Identificadores seguem `[A-Za-z][A-Za-z0-9_]*`; palavras reservadas não podem ser nomes. Veículos usam exatamente sete letras maiúsculas ou dígitos entre aspas duplas. É um identificador sintético, não uma validação de placas brasileiras. A linguagem distingue maiúsculas e minúsculas. Aceita espaços, tabulações e quebras de linha; não aceita comentários, ponto e vírgula ou escapes. O programa deve conter pelo menos um comando; blocos locais podem ser vazios.
+
+## Tipos e escopos
+
+```text
+estacionamento Campus {
+  vaga A1 comum
+  definir cliente: veiculo = "ABC1234"
+  definir destino: vaga = A1
+  entrada cliente
+  bloco {
+    definir cliente: veiculo = "DEF5678"
+    entrada cliente
+  }
+  estacionar cliente em destino
+}
+```
+
+`definir` cria um alias imutável, do tipo `veiculo` ou `vaga`. A tabela armazena nome, tipo, valor, escopo e linha. A consulta começa no bloco atual e segue para os externos. Nomes locais podem sombrear nomes externos; sair do bloco restaura a visibilidade anterior, mas não desfaz operações no estacionamento. Referências futuras e duplicidade no mesmo escopo são rejeitadas. Vagas físicas são declaradas somente no escopo global. Limite: 32 blocos aninhados.
+
+A verificação de tipos ocorre sequencialmente, antes de executar cada comando, junto à resolução de nomes. Não é uma passagem estática completa anterior à execução. Erros T001 (tipo), T002 (nome), T003 (duplicidade) e T004 (vaga física local) preservam o prefixo aceito. S004 indica anotação inválida e S005 excesso de aninhamento.
 
 ## Opções de execução
 
@@ -86,6 +112,9 @@ arquivo .dsl -> lexer -> tokens -> parser -> AST completa
 | `parkingdsl/lexer.py` | Tokenização manual e posições |
 | `parkingdsl/parser.py` | Parser descendente recursivo |
 | `parkingdsl/ast_nodes.py` | Nós imutáveis da árvore |
+| `parkingdsl/symbols.py` | Tabela de símbolos, tipos e escopos |
+| `parkingdsl/service.py` | Resultado estruturado para o painel |
+| `gui.py` e `web/` | Servidor HTTP local e interface |
 | `parkingdsl/semantic.py` | Estado e validações sem mutação |
 | `parkingdsl/interpreter.py` | Caminhamento da AST e efeitos |
 | `parkingdsl/diagnostics.py` | Diagnósticos estruturados |
@@ -107,11 +136,11 @@ python benchmark.py
 python compare_concision.py
 ```
 
-O primeiro comando grava `results/test_results.json`, com resultados individuais e por família. Os 50 métodos incluem subcasos; esse número não conta cada subcaso como um teste independente. Um teste adicional de modelo usa 10 sementes fixas e 120 tentativas de operação por semente, comparando cada operação válida gerada com um modelo independente baseado em lista e busca linear.
+Os testes incluem 21 métodos de tipos/escopos/serviço e 10 de HTTP. O primeiro comando grava `results/test_results.json`, com resultados individuais e por família. Os 81 métodos incluem subcasos; esse número não conta cada subcaso como um teste independente. Um teste adicional de modelo usa 10 sementes fixas e 120 tentativas de operação por semente, comparando cada operação válida gerada com um modelo independente baseado em lista e busca linear.
 
 O benchmark padrão realiza cinco aquecimentos e 30 repetições para cada tamanho (10, 100 e 1.000 vagas), sempre com estado novo. Cada vaga recebe um ciclo de cinco comandos; mede lexer, parser, interpretador e total, em milissegundos. A medição exclui geração, leitura, impressão, descarte final dos objetos e conferência global dos invariantes. Inclui criação de estado e registro de eventos dentro da interpretação. O coletor de lixo padrão permanece habilitado. O p95 usa nearest-rank. As repetições brutas e os dados do equipamento ficam em `results/benchmark.json`, com resumo em CSV e SHA-256 da implementação medida.
 
-Execute medições isoladamente, sem rodar testes ao mesmo tempo. Resultados variam com máquina, Python e carga do sistema. Os tempos não são prova de desempenho assintótico nem comparação com sistemas comerciais. `results/concision.json` compara apenas a Listagem 1, conta linhas e caracteres sob formatação fixa e informa o tamanho da infraestrutura separadamente. O suporte Python depende do mesmo núcleo; não é um concorrente independente nem estudo de usabilidade.
+Execute medições isoladamente, sem rodar testes ao mesmo tempo. Resultados variam com máquina, Python e carga do sistema. Os tempos não são prova de desempenho assintótico nem comparação com sistemas comerciais. `results/concision.json` compara três pares fixos: ciclo completo, ocupação e realocação, conta linhas e caracteres sob formatação fixa e informa o tamanho da infraestrutura separadamente. O suporte Python depende do mesmo núcleo; não é um concorrente independente nem estudo de usabilidade.
 
 ## Diagnósticos
 
@@ -141,4 +170,4 @@ Em `estacionar`, a ordem fixa é: existência da vaga, presença do veículo, di
 - `Relatorio_Projeto_EstacionamentoDSL.pdf`: relatório com resultados observados e guia.
 - `results/`: evidências reproduzíveis e saídas de demonstração.
 
-O escopo é acadêmico e sequencial, com estado em memória. Cobrança, reservas, sensores, IA, persistência, interface web e concorrência ficaram fora da versão proposta no artigo. A implementação não precisa de conexão à internet. A gramática, os exemplos, os testes e os scripts de medição acompanham o código para permitir avaliação e alterações. Use o roteiro para compreender as decisões e praticar a execução antes de apresentar.
+O escopo é acadêmico e sequencial, com estado em memória. Cobrança, reservas, sensores, IA, persistência e concorrência ficaram fora da versão proposta no artigo. A implementação não precisa de conexão à internet. A gramática, os exemplos, os testes e os scripts de medição acompanham o código para permitir avaliação e alterações. Use o roteiro para compreender as decisões e praticar a execução antes de apresentar.
