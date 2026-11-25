@@ -2,11 +2,13 @@
 from .lexer import Token
 from .diagnostics import DSLError
 from .ast_nodes import Program, DeclararVaga, Entrada, Estacionar, Liberar, Saida
+from .ast_nodes import Reference, Binding, Block
 
 
 class Parser:
     def __init__(self, tokens: list[Token]):
         self.tokens, self.index = tokens, 0
+        self.depth = 0
 
     @property
     def current(self):
@@ -33,6 +35,28 @@ class Parser:
 
     def command(self):
         token = self.current
+        if token.kind == 'bloco':
+            self.expect('bloco')
+            self.expect('{')
+            if self.depth >= 32:
+                raise DSLError('sintático', 'S005', 'Limite de 32 blocos aninhados.', token.position)
+            self.depth += 1
+            commands = []
+            while self.current.kind not in ('}', 'EOF'):
+                commands.append(self.command())
+            self.expect('}')
+            self.depth -= 1
+            return Block(token.position, tuple(commands))
+        if token.kind == 'definir':
+            self.expect('definir')
+            name = self.expect('ID').value
+            self.expect(':')
+            kind = self.current
+            if kind.kind not in ('veiculo', 'vaga'):
+                raise DSLError('sintático', 'S004', 'Tipo deve ser veiculo ou vaga.', kind.position)
+            self.expect(kind.kind)
+            self.expect('=')
+            return Binding(token.position, name, kind.value, self.operand())
         if token.kind == 'vaga':
             self.expect('vaga')
             space = self.expect('ID').value
@@ -43,10 +67,10 @@ class Parser:
             return DeclararVaga(token.position, space, category.value)
         if token.kind == 'entrada':
             self.expect('entrada')
-            return Entrada(token.position, self.expect('PLACA').value)
+            return Entrada(token.position, self.operand())
         if token.kind == 'estacionar':
             self.expect('estacionar')
-            plate = self.expect('PLACA').value
+            plate = self.operand()
             self.expect('em')
             return Estacionar(token.position, plate, self.expect('ID').value)
         if token.kind == 'liberar':
@@ -54,5 +78,10 @@ class Parser:
             return Liberar(token.position, self.expect('ID').value)
         if token.kind == 'saida':
             self.expect('saida')
-            return Saida(token.position, self.expect('PLACA').value)
-        raise DSLError('sintático', 'S002', 'Esperado um comando: vaga, entrada, estacionar, liberar ou saida.', token.position)
+            return Saida(token.position, self.operand())
+        raise DSLError('sintático', 'S002', 'Esperado comando de estacionamento, definir ou bloco.', token.position)
+
+    def operand(self):
+        if self.current.kind == 'ID':
+            return Reference(self.expect('ID').value)
+        return self.expect('PLACA').value

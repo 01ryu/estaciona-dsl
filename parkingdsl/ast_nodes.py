@@ -4,6 +4,25 @@ from .diagnostics import Position
 
 
 @dataclass(frozen=True)
+class Reference:
+    name: str
+
+
+@dataclass(frozen=True)
+class Binding:
+    position: Position
+    name: str
+    declared_type: str
+    value: str | Reference
+
+
+@dataclass(frozen=True)
+class Block:
+    position: Position
+    commands: tuple
+
+
+@dataclass(frozen=True)
 class DeclararVaga:
     position: Position
     space: str
@@ -13,13 +32,13 @@ class DeclararVaga:
 @dataclass(frozen=True)
 class Entrada:
     position: Position
-    plate: str
+    plate: str | Reference
 
 
 @dataclass(frozen=True)
 class Estacionar:
     position: Position
-    plate: str
+    plate: str | Reference
     space: str
 
 
@@ -32,13 +51,14 @@ class Liberar:
 @dataclass(frozen=True)
 class Saida:
     position: Position
-    plate: str
+    plate: str | Reference
 
 
-Command = DeclararVaga | Entrada | Estacionar | Liberar | Saida
+Command = DeclararVaga | Entrada | Estacionar | Liberar | Saida | Binding | Block
 
 
 @dataclass(frozen=True)
 class Program:
     name: str
     commands: tuple[Command, ...]
+

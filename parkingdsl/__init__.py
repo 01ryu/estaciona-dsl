@@ -3,4 +3,4 @@ from .interpreter import Interpreter, execute
 from .diagnostics import DSLError
 
 __all__ = ['Interpreter', 'execute', 'DSLError']
-__version__ = '1.0.0'
+__version__ = '2.0.0'

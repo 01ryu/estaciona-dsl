@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from .diagnostics import DSLError, Position
 
 KEYWORDS = frozenset(('estacionamento', 'vaga', 'comum', 'pcd', 'idoso',
-                      'entrada', 'estacionar', 'em', 'liberar', 'saida'))
+                      'entrada', 'estacionar', 'em', 'liberar', 'saida',
+                      'definir', 'veiculo', 'bloco'))
 ID = re.compile(r'[A-Za-z][A-Za-z0-9_]*')
 PLATE = re.compile(r'[A-Z0-9]{7}')
 
@@ -31,7 +32,7 @@ def tokenize(source: str) -> list[Token]:
                 column += 1
             i += 1
             continue
-        if char in '{}':
+        if char in '{}:=':
             tokens.append(Token(char, char, pos))
             i, column = i + 1, column + 1
             continue
