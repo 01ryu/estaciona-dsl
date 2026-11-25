@@ -1,0 +1,16 @@
+programa = "estacionamento", ID, "{", comando, { comando }, "}", EOF ;
+comando = declaracao | entrada | estacionar | liberar | saida ;
+declaracao = "vaga", ID, tipo ;
+tipo = "comum" | "pcd" | "idoso" ;
+entrada = "entrada", PLACA ;
+estacionar = "estacionar", PLACA, "em", ID ;
+liberar = "liberar", ID ;
+saida = "saida", PLACA ;
+
+(* Convenções léxicas, externas à EBNF acima:
+   ID: [A-Za-z][A-Za-z0-9_]*, excluídas as palavras reservadas.
+   PLACA: aspas duplas envolvendo [A-Z0-9]{7}.
+   Espaços, tabulações e quebras de linha são ignorados entre tokens.
+   Sem comentários, ponto e vírgula, escapes ou literais multilinha.
+   A linguagem distingue maiúsculas e minúsculas.
+*)
