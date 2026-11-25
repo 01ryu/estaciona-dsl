@@ -1,0 +1,19 @@
+{
+  "scenario": "Listagem 1 do artigo",
+  "dsl": {
+    "nonempty_noncomment_lines": 9,
+    "characters": 138
+  },
+  "python": {
+    "nonempty_noncomment_lines": 9,
+    "characters": 204
+  },
+  "line_ratio": 1.0,
+  "character_ratio": 0.6764705882352942,
+  "infrastructure_physical_lines": {
+    "dsl_modules": 382,
+    "python_adapter": 27
+  },
+  "equivalent_state_and_operation_types": true,
+  "convention": "Sem linhas vazias/comentários; LF entre linhas, sem LF final. Sem reformatação. Conta delimitadores/importações. Adapter Python depende do núcleo comum; não é implementação independente. Não mede usabilidade."
+}

@@ -1,0 +1,402 @@
+[
+  {
+    "example": "01_ciclo_completo.dsl",
+    "exit_code": 0,
+    "status": "sucesso",
+    "name": "Central",
+    "accepted_commands": 7,
+    "state": {
+      "spaces": {
+        "A1": "comum",
+        "A2": "pcd",
+        "A3": "idoso"
+      },
+      "present": [],
+      "occupied": {},
+      "vehicle_space": {}
+    },
+    "events": [
+      {
+        "number": 1,
+        "operation": "DeclararVaga",
+        "description": "Vaga A1 declarada (comum).",
+        "line": 2,
+        "column": 1
+      },
+      {
+        "number": 2,
+        "operation": "DeclararVaga",
+        "description": "Vaga A2 declarada (pcd).",
+        "line": 3,
+        "column": 1
+      },
+      {
+        "number": 3,
+        "operation": "DeclararVaga",
+        "description": "Vaga A3 declarada (idoso).",
+        "line": 4,
+        "column": 1
+      },
+      {
+        "number": 4,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 5,
+        "column": 1
+      },
+      {
+        "number": 5,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A1.",
+        "line": 6,
+        "column": 1
+      },
+      {
+        "number": 6,
+        "operation": "Liberar",
+        "description": "Vaga A1 liberada; ABC1234 permanece presente.",
+        "line": 7,
+        "column": 1
+      },
+      {
+        "number": 7,
+        "operation": "Saida",
+        "description": "Saída de ABC1234.",
+        "line": 8,
+        "column": 1
+      }
+    ],
+    "error": null
+  },
+  {
+    "example": "02_ocupacao.dsl",
+    "exit_code": 0,
+    "status": "sucesso",
+    "name": "Campus",
+    "accepted_commands": 9,
+    "state": {
+      "spaces": {
+        "A1": "comum",
+        "A2": "pcd",
+        "A3": "idoso"
+      },
+      "present": [
+        "ABC1234",
+        "DEF5678",
+        "GHI9012"
+      ],
+      "occupied": {
+        "A1": "ABC1234",
+        "A2": "DEF5678",
+        "A3": "GHI9012"
+      },
+      "vehicle_space": {
+        "ABC1234": "A1",
+        "DEF5678": "A2",
+        "GHI9012": "A3"
+      }
+    },
+    "events": [
+      {
+        "number": 1,
+        "operation": "DeclararVaga",
+        "description": "Vaga A1 declarada (comum).",
+        "line": 2,
+        "column": 1
+      },
+      {
+        "number": 2,
+        "operation": "DeclararVaga",
+        "description": "Vaga A2 declarada (pcd).",
+        "line": 3,
+        "column": 1
+      },
+      {
+        "number": 3,
+        "operation": "DeclararVaga",
+        "description": "Vaga A3 declarada (idoso).",
+        "line": 4,
+        "column": 1
+      },
+      {
+        "number": 4,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 5,
+        "column": 1
+      },
+      {
+        "number": 5,
+        "operation": "Entrada",
+        "description": "Entrada de DEF5678.",
+        "line": 6,
+        "column": 1
+      },
+      {
+        "number": 6,
+        "operation": "Entrada",
+        "description": "Entrada de GHI9012.",
+        "line": 7,
+        "column": 1
+      },
+      {
+        "number": 7,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A1.",
+        "line": 8,
+        "column": 1
+      },
+      {
+        "number": 8,
+        "operation": "Estacionar",
+        "description": "DEF5678 estacionado em A2.",
+        "line": 9,
+        "column": 1
+      },
+      {
+        "number": 9,
+        "operation": "Estacionar",
+        "description": "GHI9012 estacionado em A3.",
+        "line": 10,
+        "column": 1
+      }
+    ],
+    "error": null
+  },
+  {
+    "example": "03_realocacao.dsl",
+    "exit_code": 0,
+    "status": "sucesso",
+    "name": "Campus",
+    "accepted_commands": 9,
+    "state": {
+      "spaces": {
+        "A1": "comum",
+        "A2": "comum"
+      },
+      "present": [
+        "ABC1234"
+      ],
+      "occupied": {},
+      "vehicle_space": {}
+    },
+    "events": [
+      {
+        "number": 1,
+        "operation": "DeclararVaga",
+        "description": "Vaga A1 declarada (comum).",
+        "line": 2,
+        "column": 1
+      },
+      {
+        "number": 2,
+        "operation": "DeclararVaga",
+        "description": "Vaga A2 declarada (comum).",
+        "line": 3,
+        "column": 1
+      },
+      {
+        "number": 3,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 4,
+        "column": 1
+      },
+      {
+        "number": 4,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A1.",
+        "line": 5,
+        "column": 1
+      },
+      {
+        "number": 5,
+        "operation": "Liberar",
+        "description": "Vaga A1 liberada; ABC1234 permanece presente.",
+        "line": 6,
+        "column": 1
+      },
+      {
+        "number": 6,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A2.",
+        "line": 7,
+        "column": 1
+      },
+      {
+        "number": 7,
+        "operation": "Liberar",
+        "description": "Vaga A2 liberada; ABC1234 permanece presente.",
+        "line": 8,
+        "column": 1
+      },
+      {
+        "number": 8,
+        "operation": "Saida",
+        "description": "Saída de ABC1234.",
+        "line": 9,
+        "column": 1
+      },
+      {
+        "number": 9,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 10,
+        "column": 1
+      }
+    ],
+    "error": null
+  },
+  {
+    "example": "04_erro_ocupada.dsl",
+    "exit_code": 1,
+    "status": "interrompido",
+    "name": "Conflito",
+    "accepted_commands": 4,
+    "state": {
+      "spaces": {
+        "A1": "comum"
+      },
+      "present": [
+        "ABC1234",
+        "DEF5678"
+      ],
+      "occupied": {
+        "A1": "ABC1234"
+      },
+      "vehicle_space": {
+        "ABC1234": "A1"
+      }
+    },
+    "events": [
+      {
+        "number": 1,
+        "operation": "DeclararVaga",
+        "description": "Vaga A1 declarada (comum).",
+        "line": 2,
+        "column": 1
+      },
+      {
+        "number": 2,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 3,
+        "column": 1
+      },
+      {
+        "number": 3,
+        "operation": "Entrada",
+        "description": "Entrada de DEF5678.",
+        "line": 4,
+        "column": 1
+      },
+      {
+        "number": 4,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A1.",
+        "line": 5,
+        "column": 1
+      }
+    ],
+    "error": {
+      "phase": "semântico",
+      "code": "E005",
+      "message": "Vaga A1 ocupada.",
+      "line": 6,
+      "column": 1
+    }
+  },
+  {
+    "example": "05_erro_sintatico.dsl",
+    "exit_code": 1,
+    "status": "interrompido",
+    "name": null,
+    "accepted_commands": 0,
+    "state": {
+      "spaces": {},
+      "present": [],
+      "occupied": {},
+      "vehicle_space": {}
+    },
+    "events": [],
+    "error": {
+      "phase": "sintático",
+      "code": "S001",
+      "message": "Esperado 'em'; encontrado 'A1'.",
+      "line": 4,
+      "column": 22
+    }
+  },
+  {
+    "example": "06_erro_lexico.dsl",
+    "exit_code": 1,
+    "status": "interrompido",
+    "name": null,
+    "accepted_commands": 0,
+    "state": {
+      "spaces": {},
+      "present": [],
+      "occupied": {},
+      "vehicle_space": {}
+    },
+    "events": [],
+    "error": {
+      "phase": "léxico",
+      "code": "L003",
+      "message": "Veículo deve ter exatamente 7 letras maiúsculas ou dígitos.",
+      "line": 3,
+      "column": 9
+    }
+  },
+  {
+    "example": "07_erro_saida.dsl",
+    "exit_code": 1,
+    "status": "interrompido",
+    "name": "Conflito",
+    "accepted_commands": 3,
+    "state": {
+      "spaces": {
+        "A1": "comum"
+      },
+      "present": [
+        "ABC1234"
+      ],
+      "occupied": {
+        "A1": "ABC1234"
+      },
+      "vehicle_space": {
+        "ABC1234": "A1"
+      }
+    },
+    "events": [
+      {
+        "number": 1,
+        "operation": "DeclararVaga",
+        "description": "Vaga A1 declarada (comum).",
+        "line": 2,
+        "column": 1
+      },
+      {
+        "number": 2,
+        "operation": "Entrada",
+        "description": "Entrada de ABC1234.",
+        "line": 3,
+        "column": 1
+      },
+      {
+        "number": 3,
+        "operation": "Estacionar",
+        "description": "ABC1234 estacionado em A1.",
+        "line": 4,
+        "column": 1
+      }
+    ],
+    "error": {
+      "phase": "semântico",
+      "code": "E008",
+      "message": "Libere a vaga A1 antes da saída de ABC1234.",
+      "line": 5,
+      "column": 1
+    }
+  }
+]
