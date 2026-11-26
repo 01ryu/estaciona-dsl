@@ -1,4 +1,9 @@
-# APRESENTACAO: tabela de simbolos | nomes, tipos e valores | escopos | bloco interno
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# A tabela de símbolos guarda os nomes definidos no programa, seus tipos, valores e escopos.
+# Por exemplo, cliente pode representar um veículo e destino pode representar uma vaga.
+# A busca começa no bloco atual e continua nos blocos externos. Um nome local pode esconder temporariamente um nome externo.
+# Quando saímos do bloco, o nome externo volta a ser encontrado. Isso não retira o carro do estacionamento.
+# MOSTRAR: find e expect; na interface, abrir Símbolos e escopos.
 
 """Tabela de símbolos tipados, resolução léxica e escopos de aliases imutáveis."""
 from dataclasses import asdict, dataclass

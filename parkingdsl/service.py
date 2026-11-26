@@ -1,4 +1,20 @@
-# APRESENTACAO: ponte da interface | lexer -> parser -> interpretador | resultado em JSON
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# O service.py faz a ponte entre a interface gráfica e o interpretador.
+#
+# Quando você clica em Executar, acontece este caminho:
+# 1. A interface envia o código para o servidor em gui.py.
+# 2. O servidor chama o service.py.
+# 3. Ele encaminha o texto ao lexer, que gera os tokens.
+# 4. Chama o parser, que monta a árvore sintática.
+# 5. Chama o interpretador, que executa os comandos.
+# 6. Organiza os resultados para a interface mostrar: vagas, veículos, eventos, tokens, árvore, símbolos e possíveis erros.
+#
+# Ele também limita o tamanho do código recebido e inicia cada execução com um estacionamento vazio.
+#
+# PARA FALAR AO PROFESSOR:
+# O service.py centraliza o processamento solicitado pela interface. Ele conecta as etapas de análise e execução e organiza os resultados para serem enviados à tela em JSON. Assim, a interface utiliza o mesmo interpretador que usamos no terminal.
+#
+# PALAVRAS-CHAVE: ponte com a interface -> organiza as etapas -> devolve resultados.
 
 """Fachada compartilhada da interface; sempre usa o lexer, parser e interpretador reais."""
 from dataclasses import asdict, is_dataclass

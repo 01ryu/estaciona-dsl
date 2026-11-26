@@ -1,4 +1,8 @@
-# APRESENTACAO: erros da DSL | fase, codigo e mensagem | linha e coluna
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este arquivo padroniza os erros da nossa linguagem.
+# Cada erro informa a fase, o código, a mensagem e a posição, com linha e coluna.
+# Assim, o terminal e a interface conseguem explicar o mesmo problema de maneiras diferentes.
+# MOSTRAR: Position e DSLError.
 
 from dataclasses import dataclass
 

@@ -1,4 +1,8 @@
-# APRESENTACAO: arvore sintatica abstrata (AST) | dataclasses | estrutura dos comandos
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Aqui definimos os objetos que representam os comandos da linguagem na árvore sintática.
+# Um objeto de entrada guarda o veículo; um de estacionar guarda o veículo e a vaga.
+# Usamos dataclasses para definir essas estruturas de dados, incluindo posições para apontar erros.
+# A árvore representa o programa; quem aplica seus efeitos é o interpretador.
 
 """Árvore sintática abstrata com posição do início de cada comando."""
 # dataclass gera inicialização e comparação dos objetos da árvore.

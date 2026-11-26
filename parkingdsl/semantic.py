@@ -1,5 +1,9 @@
-# APRESENTACAO: regras de validade | estado do estacionamento | vaga ocupada, veiculo ausente
-# Valida antes de alterar: liberar vaga nao registra saida do veiculo.
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este arquivo representa o estado do estacionamento e verifica as regras que cada comando precisa respeitar.
+# Não basta um comando estar escrito corretamente: a vaga deve existir e estar livre, e o veículo precisa estar presente.
+# A função validate verifica essas condições antes de qualquer alteração.
+# Liberar e sair são operações diferentes. Liberar desfaz a ocupação da vaga, mas o veículo continua presente. A saída é o comando que retira a presença dele no estacionamento.
+# MOSTRAR: State, spaces, present, occupied, vehicle_space e validate.
 
 """Estado S=(V,P,O), índice inverso e pré-condições sem efeitos colaterais."""
 from dataclasses import dataclass, field

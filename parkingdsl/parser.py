@@ -1,4 +1,9 @@
-# APRESENTACAO: analise sintatica | tokens -> AST | gramatica | descida recursiva
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Depois dos tokens, o parser verifica se eles estão na ordem permitida pela gramática da linguagem.
+# Por exemplo, estacionar precisa receber um veículo, a palavra em e uma vaga.
+# Se a estrutura estiver correta, ele monta a AST, a árvore sintática abstrata.
+# O parser não estaciona veículos: ele organiza os comandos para serem executados depois.
+# MOSTRAR: Parser, parse, command e operand; depois abrir a aba Árvore sintática.
 
 """Parser descendente recursivo, sem execução ou alterações de estado."""
 from .lexer import Token

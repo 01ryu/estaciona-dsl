@@ -1,4 +1,8 @@
-# APRESENTACAO: terminal (CLI) | argumentos | leitura do .dsl | execucao e exportacao JSON
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este arquivo controla a execução pelo terminal.
+# Ele lê os argumentos, abre o arquivo .dsl e chama as etapas de análise e interpretação.
+# Também permite inspecionar tokens e AST, acompanhar os comandos e exportar o resultado em JSON.
+# MOSTRAR: main, argparse e as opções --tokens, --ast, --trace, --verify e --json.
 
 """Interface de linha de comando e exportação determinística em JSON."""
 # Bibliotecas padrão: argparse lê opções do terminal, json serializa dados,

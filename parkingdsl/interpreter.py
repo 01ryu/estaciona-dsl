@@ -1,4 +1,9 @@
-# APRESENTACAO: executa a AST | resolve nomes | valida comandos | altera estado | eventos
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# O interpretador percorre a árvore sintática e executa os comandos na ordem em que aparecem.
+# Para cada comando, resolve os nomes, verifica os tipos e as regras semânticas, altera o estado e registra um evento.
+# Se encontrar um erro, interrompe a execução e preserva os comandos anteriores que foram aceitos.
+# Ao entrar em um bloco, cria um escopo; ao sair, remove esse escopo, mas não desfaz as operações realizadas no estacionamento.
+# MOSTRAR: step e o tratamento dos blocos; relacionar com a aba Registro.
 
 """Interpretação por caminhamento da AST; cada comando é validado antes da mutação."""
 # replace cria uma cópia de um nó imutável com os nomes resolvidos, preservando a AST.

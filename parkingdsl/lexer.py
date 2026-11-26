@@ -1,4 +1,10 @@
-# APRESENTACAO: analise lexica | texto -> tokens | palavras reservadas | linha e coluna
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Para executar esse texto, primeiro passamos pelo analisador léxico, implementado no arquivo lexer.py.
+# Ele percorre o código e reconhece unidades chamadas tokens, como palavras reservadas, identificadores, placas e chaves. Cada token também guarda sua posição, para conseguirmos apontar onde ocorreu um erro.
+#
+# MOSTRAR: KEYWORDS, os padrões ID e PLATE e a função tokenize.
+# Aqui temos as palavras reservadas e os padrões aceitos. Por exemplo, o identificador de veículo deve ter exatamente sete letras maiúsculas ou dígitos. Se aparecer um caractere inválido ou um literal fora desse padrão, a análise léxica rejeita a entrada.
+# Na interface, abra a aba Tokens para relacionar o código ao resultado.
 
 """Analisador léxico manual; posições em caracteres, começando em 1."""
 # re é a biblioteca padrão de expressões regulares; dataclass cria classes de dados.
