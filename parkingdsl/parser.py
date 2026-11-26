@@ -1,3 +1,5 @@
+# APRESENTACAO: analise sintatica | tokens -> AST | gramatica | descida recursiva
+
 """Parser descendente recursivo, sem execução ou alterações de estado."""
 from .lexer import Token
 from .diagnostics import DSLError

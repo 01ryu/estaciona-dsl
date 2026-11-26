@@ -1,3 +1,5 @@
+# APRESENTACAO: executa a AST | resolve nomes | valida comandos | altera estado | eventos
+
 """Interpretação por caminhamento da AST; cada comando é validado antes da mutação."""
 # replace cria uma cópia de um nó imutável com os nomes resolvidos, preservando a AST.
 from dataclasses import dataclass, replace

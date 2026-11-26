@@ -1,3 +1,6 @@
+# APRESENTACAO: regras de validade | estado do estacionamento | vaga ocupada, veiculo ausente
+# Valida antes de alterar: liberar vaga nao registra saida do veiculo.
+
 """Estado S=(V,P,O), índice inverso e pré-condições sem efeitos colaterais."""
 from dataclasses import dataclass, field
 from .ast_nodes import DeclararVaga, Entrada, Estacionar, Liberar, Saida

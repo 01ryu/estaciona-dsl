@@ -1,3 +1,5 @@
+# APRESENTACAO: pacote parkingdsl | exporta Interpreter, execute e DSLError
+
 """DSL educacional para operações de estacionamento."""
 from .interpreter import Interpreter, execute
 from .diagnostics import DSLError

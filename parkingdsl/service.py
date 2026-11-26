@@ -1,3 +1,5 @@
+# APRESENTACAO: ponte da interface | lexer -> parser -> interpretador | resultado em JSON
+
 """Fachada compartilhada da interface; sempre usa o lexer, parser e interpretador reais."""
 from dataclasses import asdict, is_dataclass
 from .diagnostics import DSLError

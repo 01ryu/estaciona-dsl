@@ -1,3 +1,5 @@
+# APRESENTACAO: terminal (CLI) | argumentos | leitura do .dsl | execucao e exportacao JSON
+
 """Interface de linha de comando e exportação determinística em JSON."""
 # Bibliotecas padrão: argparse lê opções do terminal, json serializa dados,
 # Path acessa arquivos e sys fornece os canais de saída/códigos do processo.

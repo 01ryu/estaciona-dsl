@@ -1,3 +1,5 @@
+# APRESENTACAO: erros da DSL | fase, codigo e mensagem | linha e coluna
+
 from dataclasses import dataclass
 
 

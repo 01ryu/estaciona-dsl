@@ -1,3 +1,5 @@
+# APRESENTACAO: tabela de simbolos | nomes, tipos e valores | escopos | bloco interno
+
 """Tabela de símbolos tipados, resolução léxica e escopos de aliases imutáveis."""
 from dataclasses import asdict, dataclass
 from .ast_nodes import Reference

@@ -1,3 +1,5 @@
+# APRESENTACAO: arvore sintatica abstrata (AST) | dataclasses | estrutura dos comandos
+
 """Árvore sintática abstrata com posição do início de cada comando."""
 # dataclass gera inicialização e comparação dos objetos da árvore.
 # Estes objetos descrevem comandos; seus efeitos são aplicados pelo interpretador.

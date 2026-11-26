@@ -1,3 +1,5 @@
+# APRESENTACAO: analise lexica | texto -> tokens | palavras reservadas | linha e coluna
+
 """Analisador léxico manual; posições em caracteres, começando em 1."""
 # re é a biblioteca padrão de expressões regulares; dataclass cria classes de dados.
 # O ponto em .diagnostics indica um módulo do próprio pacote parkingdsl.
