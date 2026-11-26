@@ -1,3 +1,6 @@
+# APRESENTACAO: adaptador Python | classe Parking | enter, park, release, leave
+# Reutiliza o interpretador para comparar Python e DSL; nao e uma API web.
+
 """Suporte explícito para o cenário equivalente em Python; usa as mesmas regras."""
 from parkingdsl.ast_nodes import DeclararVaga, Entrada, Estacionar, Liberar, Saida
 from parkingdsl.diagnostics import Position

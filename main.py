@@ -1,3 +1,6 @@
+# APRESENTACAO: entrada pelo terminal | arquivo .dsl | opcoes como --trace
+# Delega para parkingdsl/main.py: leitura -> analise -> interpretacao -> resultado.
+
 # Ponto de entrada do terminal: delega o trabalho para o pacote parkingdsl.
 # O import traz a função main do nosso projeto, não de uma biblioteca externa.
 from parkingdsl.main import main

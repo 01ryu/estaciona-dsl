@@ -1,3 +1,6 @@
+# APRESENTACAO: servidor HTTP local | http.server | navegador <-> Python
+# Entrega HTML/CSS/JS; recebe o codigo e encaminha ao service.py.
+
 """Painel local: python gui.py. Não depende de pacotes externos nem executa Python do editor."""
 import argparse
 import json

@@ -1,3 +1,6 @@
+# APRESENTACAO: desempenho | cargas de teste | tempos do lexer, parser e interpretador
+# Repeticoes e estatisticas -> evidencias salvas em results.
+
 """Protocolo do artigo: 5 aquecimentos e 30 repetições, por etapa."""
 import argparse
 import csv
