@@ -1,5 +1,9 @@
-# APRESENTACAO: servidor HTTP local | http.server | navegador <-> Python
-# Entrega HTML/CSS/JS; recebe o codigo e encaminha ao service.py.
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# A interface é uma página aberta no navegador e atendida por um servidor Python local.
+# Usamos http.server, da biblioteca padrão, para entregar HTML, CSS e JavaScript e receber o código enviado pelo botão Executar.
+# O servidor encaminha esse código ao service.py e devolve os resultados em JSON.
+# O endereço 127.0.0.1 representa o próprio computador. Não precisamos hospedar na internet.
+# O terminal precisa continuar aberto para manter o servidor funcionando.
 
 """Painel local: python gui.py. Não depende de pacotes externos nem executa Python do editor."""
 import argparse

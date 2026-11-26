@@ -1,5 +1,8 @@
-# APRESENTACAO: adaptador Python | classe Parking | enter, park, release, leave
-# Reutiliza o interpretador para comparar Python e DSL; nao e uma API web.
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este arquivo oferece uma forma de realizar as operações do estacionamento por chamadas Python.
+# A classe Parking tem métodos como enter, park, release e leave.
+# Ela reutiliza o mesmo interpretador e permite comparar exemplos escritos em Python com exemplos na DSL.
+# Não é uma API web nem um sistema concorrente independente.
 
 """Suporte explícito para o cenário equivalente em Python; usa as mesmas regras."""
 from parkingdsl.ast_nodes import DeclararVaga, Entrada, Estacionar, Liberar, Saida

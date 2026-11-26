@@ -1,5 +1,7 @@
-# APRESENTACAO: entrada pelo terminal | arquivo .dsl | opcoes como --trace
-# Delega para parkingdsl/main.py: leitura -> analise -> interpretacao -> resultado.
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este é o ponto de entrada para executar o projeto pelo terminal com python main.py.
+# Ele encaminha a execução para a função main dentro do pacote parkingdsl.
+# A lógica do interpretador fica dividida nos módulos do pacote.
 
 # Ponto de entrada do terminal: delega o trabalho para o pacote parkingdsl.
 # O import traz a função main do nosso projeto, não de uma biblioteca externa.

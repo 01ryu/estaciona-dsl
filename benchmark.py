@@ -1,5 +1,8 @@
-# APRESENTACAO: desempenho | cargas de teste | tempos do lexer, parser e interpretador
-# Repeticoes e estatisticas -> evidencias salvas em results.
+# GUIA DE FALA PARA APRESENTACAO / TREINO
+# Este arquivo mede o desempenho do interpretador com cargas de tamanhos diferentes.
+# Ele gera programas de teste, faz aquecimentos e repete as medições das etapas léxica, sintática e de interpretação.
+# Depois calcula estatísticas e salva as evidências em results.
+# Os tempos dependem do computador e não provam que o projeto é melhor que outros sistemas.
 
 """Protocolo do artigo: 5 aquecimentos e 30 repetições, por etapa."""
 import argparse
