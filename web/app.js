@@ -13,6 +13,27 @@ function setSource(source){$('source').value=source;edited();dirty=false;}
 function confirmReplace(){return !dirty || window.confirm('Substituir o código editado? Salve o arquivo antes se quiser mantê-lo.');}
 // Monta tabelas reutilizadas nas abas de tokens e símbolos.
 function table(headers, rows){const t=node('table'),head=node('thead'),tr=node('tr');headers.forEach(h=>tr.append(node('th',h)));head.append(tr);t.append(head);const body=node('tbody');rows.forEach(row=>{const r=node('tr');row.forEach(v=>r.append(node('td',String(v))));body.append(r);});t.append(body);return t;}
+// Presença e ocupação são relações diferentes: liberar remove a vaga, saida remove a presença.
+// Usamos o estado real retornado pelo Python, inclusive quando há interrupção semântica.
+function renderPresent(state) {
+  const list = $('present-list');
+  list.replaceChildren();
+  const withoutSpace = state.present.filter(plate => !Object.hasOwn(state.vehicle_space, plate));
+  $('presence-count').textContent = state.present.length + ' dentro · ' + withoutSpace.length + ' sem vaga';
+  if (!state.present.length) {
+    list.append(node('p', 'Nenhum veículo permanece dentro nesta execução. As saídas registradas podem ser consultadas na aba Registro.', 'empty'));
+    return;
+  }
+  state.present.forEach(plate => {
+    const parked = Object.hasOwn(state.vehicle_space, plate);
+    const row = node('article', undefined, 'present-row' + (parked ? '' : ' awaiting-exit'));
+    const description = node('div', undefined, 'present-description');
+    description.append(node('strong', plate));
+    description.append(node('span', parked ? 'Estacionado na vaga ' + state.vehicle_space[plate] : 'Sem vaga · permanece no estacionamento'));
+    row.append(description, node('span', 'Saída não registrada', 'presence-badge'));
+    list.append(row);
+  });
+}
 // Atualiza contadores, vagas, eventos, AST e escopos usando a resposta do servidor.
 function render(data){const s=data.state, entries=Object.entries(s.spaces), count=Object.keys(s.occupied).length;
  $('park-name').textContent=data.name || 'Seu estacionamento';$('total').textContent=entries.length;$('free').textContent=entries.length-count;$('occupied').textContent=count;$('occupancy').textContent=(entries.length?Math.round(count/entries.length*100):0)+'% de ocupação';
@@ -20,6 +41,7 @@ function render(data){const s=data.state, entries=Object.entries(s.spaces), coun
  $('spaces').replaceChildren();if(!entries.length)$('spaces').append(node('p','Nenhuma vaga declarada nesta execução.','empty'));
  entries.forEach(([name,category])=>{const occupied=Object.hasOwn(s.occupied,name),card=node('article',undefined,'space'+(occupied?' occupied':''));card.innerHTML=car;card.append(node('strong',name),node('small',category.toUpperCase()),node('span',occupied?s.occupied[name]:'● Livre'));$('spaces').append(card);});
  const waiting=s.present.filter(p=>!Object.hasOwn(s.vehicle_space,p));$('vehicles').textContent=s.present.length+' veículo(s) presente(s)'+(waiting.length?' · Sem vaga: '+waiting.join(', '):'');
+ renderPresent(s);
  $('event-count').textContent=data.accepted_commands+' comando(s) aceito(s)';$('view-events').replaceChildren();data.events.forEach(e=>{const row=node('div',undefined,'event');row.append(node('span',String(e.number).padStart(2,'0')),node('span',e.description),node('small','L'+e.line+':'+e.column));$('view-events').append(row);});if(!data.events.length)$('view-events').append(node('p','Nenhum comando foi executado.','empty'));
  $('view-tokens').replaceChildren(table(['Token','Valor','Linha','Coluna'],data.tokens.map(t=>[t.kind,t.value,t.position.line,t.position.column])));
  $('view-ast').replaceChildren(node('pre',data.ast?JSON.stringify(data.ast,null,2):'A análise não produziu uma AST completa.'));
