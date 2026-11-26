@@ -6,7 +6,7 @@ O programa interpreta arquivos `.dsl` em português, constrói uma AST e executa
 
 ## Interface gráfica
 
-No Windows, abra **ABRIR_INTERFACE.bat** com dois cliques. Ou execute `python gui.py` dentro da pasta do projeto. O navegador abre em `http://127.0.0.1:8765`. Mantenha o terminal aberto; Ctrl+C encerra o servidor. Se a porta estiver ocupada, use `python gui.py --port 8766`.
+No Windows, abra **ABRIR_INTERFACE.bat** com dois cliques. O atalho usa `http://127.0.0.1:8766`, a porta validada para esta apresentação. Mantenha a janela do terminal aberta; pode minimizar. Para iniciar manualmente, execute `python gui.py --port 8766` dentro da pasta do projeto. Se o servidor já estiver rodando, abra esse endereço no navegador sem iniciar outra instância. Para encerrar, pressione Ctrl+C no terminal. Executar `python gui.py` sem opções continua usando a porta padrão 8765.
 
 O Studio é um painel local: editor, exemplos, abrir/salvar `.dsl`, mapa de vagas, veículos, registro, tokens, AST e símbolos. Clique em **Executar** depois de editar. Cada execução começa com estado vazio. Não há banco de dados nem sessão persistente; salve seu código em arquivo. O painel usa o mesmo interpretador Python do terminal, não uma simulação em JavaScript. Limites do painel: 64 KiB de fonte e 6.000 tokens. Para benchmarks maiores, use a CLI.
 
