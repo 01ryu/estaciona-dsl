@@ -1,6 +1,6 @@
 # EstacionamentoDSL
 
-Implementação do projeto **Uma Linguagem Específica de Domínio para Gerenciamento de Estacionamentos Inteligentes**, baseada no artigo fornecido. Equipe indicada no artigo: Ryan Augusto Dias, Luiz Augusto Curtolo de Souza e Bruno Barroso dos Santos; Engenharia de Computação, FHO.
+Implementação do projeto **Uma Linguagem Específica de Domínio para Gerenciamento de Estacionamentos Inteligentes**, baseada no artigo fornecido. Equipe indicada no artigo: Ryan Augusto Dias e Bruno Barroso dos Santos; Engenharia de Computação, FHO.
 
 O programa interpreta arquivos `.dsl` em português, constrói uma AST e executa cinco operações com validação de estado, aliases tipados e blocos com escopo léxico. Os resultados experimentais em `results/` são medições realizadas nesta entrega. O relatório PDF explica implementação, evidências e apresentação.
 
